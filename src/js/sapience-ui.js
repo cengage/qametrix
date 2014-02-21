@@ -1,11 +1,31 @@
 function spiderChartController($scope, limitToFilter) {
-  $scope.ideas = [
-    ['ideas1', 1],
-    ['ideas2', 8],
-    ['ideas3', 5]
-  ];
+  $scope.applications = [
+	{ id: 0, name: 'Select Application'},
+    { id: 1, name: 'LCO'},
+    { id: 2, name: 'GVRL'}];
+  $scope.selectedApplication = $scope.applications[0];
   
-  $scope.limitedIdeas = limitToFilter($scope.ideas, 2);
+  $scope.metricTypes = [
+	{ id: 0, name: 'Select Metric Type'},
+	{ id: 1, name: 'Bugs'},
+	{ id: 2, name: 'Code Quality'},
+  ];
+  $scope.selectedMetricType = $scope.metricTypes[0]; 
+		   
+  $scope.metricData = {};
+  $scope.metricData[$scope.applications[1].name + $scope.metricTypes[1].name] = [1,1,1,1,1,1,1];
+  $scope.metricData[$scope.applications[1].name + $scope.metricTypes[2].name] = [2,2,2,2,2,2,2];
+  $scope.metricData[$scope.applications[2].name + $scope.metricTypes[1].name] = [3,3,3,3,3,3,3];
+  $scope.metricData[$scope.applications[2].name + $scope.metricTypes[2].name] = [4,4,4,4,4,4,4];
+  
+  $scope.$watch('selectedMetricType', function() {
+			var spiderDataForType = $scope.getMetrics($scope.selectedApplication, $scope.selectedMetricType); 
+			$scope.spiderData = spiderDataForType;
+           });
+		   
+  $scope.getMetrics = function(application, metricType){
+	return $scope.metricData[application.name+metricType.name];
+  };
 }
 
 angular.module('sapienceUI', [])
@@ -29,11 +49,11 @@ angular.module('sapienceUI', [])
 	    },
 	    
 	    title: {
-	        text: 'Quality Metrics',
+	        text: 'Quality Metrics'
 	    },
 	    
 	    xAxis: {
-	        categories: ['Show Stopper', 
+	        categories: ['% Code Coverage','Cyclomatic Complexity','Show Stopper', 
 	                'Critical', 'Medium','Low','Trivial'],
 	        tickmarkPlacement: 'on',
 	        lineWidth: 0
@@ -58,20 +78,19 @@ angular.module('sapienceUI', [])
 	    },
 	    
 	    series: [{
-	        name: 'LCO',
-	        data: [1,1,3,7,12],
+	        name: 'Actual',
+	        data: [0,0,0,0,0,0,0],
 	        pointPlacement: 'on'
 	    }, {
 	        name: 'Expected',
-	        data: [0,0,5,10,15],
+	        data: [2,2,2,3,2,4,1],
 	        pointPlacement: 'on'
-	    }]
-		
+	    }]		
       });
 	  
-      scope.$watch("items", function (newValue) {        
-      }, true);
-      
+      scope.$watch("items", function (newData) {
+        chart.series[0].setData(newData, true);
+      }, true);      
     }
   }
 });

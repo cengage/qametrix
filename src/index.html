@@ -6,21 +6,22 @@
     <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">
 	<style>
 		.spiderChart{height:900px;}
+		
 	</style>
 </head>
 
 <body>
 	<div ng-app="sapienceUI">
-		<div id="applicationSelector">
-			<select>
-			<option value="">Select an application</option>
-			<option value="GVRL">GVRL</option>
-			<option value="LCO">LCO</option>
-			<option value="ITOF">ITOF</option>
+		<div ng-controller="spiderChartController">
+			<select ng-model="selectedApplication" 
+					ng-options="application as application.name for application in applications">
 			</select>
-		</div>
-		<div class="charts" ng-controller="spiderChartController">	
-			<div class="spiderChart" items="limitedIdeas"></div>
+			<select ng-model="selectedMetricType" 
+					ng-options="metricType as metricType.name for metricType in metricTypes">
+			</select>
+			<div class="charts">	
+				<div class="spiderChart" items="spiderData"></div>
+			</div>
 		</div>
 	</div>
 </body>
