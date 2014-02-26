@@ -5,7 +5,8 @@
     <title>Sapience-UI</title>
     <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">
 	<style>
-		.spiderChart{height:900px;}
+		#spiderChart{height:800px;width:800px;float:left;}
+		#lineChart{height:600px;width:1000px;float:right;}
 		
 	</style>
 </head>
@@ -13,15 +14,16 @@
 <body>
 	<div ng-app="sapienceUI">
 		<div ng-controller="spiderChartController">
-			<select ng-model="selectedApplication" 
-					ng-options="application as application.name for application in applications">
-			</select>
-			<select ng-model="selectedMetricType" 
-					ng-options="metricType as metricType.name for metricType in metricTypes">
-			</select>
-			<div class="charts">	
-				<div class="spiderChart" items="spiderData"></div>
-			</div>
+			<label ng-repeat="application in applications">
+				<input
+					type="checkbox"
+					name="selectedApplication[]"
+					value="{{application.id}}"
+					ng-click="applicationToggled(application)"
+				> {{application.name}}
+			</label>
+			<div id="spiderChart"></div>	
+			<div id="lineChart"></div>
 		</div>
 	</div>
 </body>
