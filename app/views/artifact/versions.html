@@ -1,0 +1,7 @@
+<section data-ng-controller="ArtifactsController" data-ng-init="versions()">
+    <ul class="versions">
+        <li data-ng-repeat="version in artifact.versions">
+            <a data-ng-href="#!/artifacts/{{artifact.name}}/{{version.text}}">{{version.text}}</a>
+        </li>
+    </ul>
+</section>
