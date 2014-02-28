@@ -1,3 +1,12 @@
 <section data-ng-controller="HomeController">
-	<h1>This is the home view</h1>
+	<label ng-repeat="application in applications">
+				<input
+					type="checkbox"
+					name="selectedApplication[]"
+					value="{{application.id}}"
+					ng-click="applicationToggled(application)"
+				> {{application.name}}
+			</label>
+	<div id="spiderChart"></div>	
+	<div id="lineChart"></div>
 </section>
