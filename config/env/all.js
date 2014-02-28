@@ -9,8 +9,11 @@ module.exports = {
     templateEngine: 'swig',
     proxit: {
         routes: {
-            '/artifacts': 'http://localhost:3000/artifacts'
+            '/sapience/service': 'http://localhost:3000/sapience/service'
         },
         verbose: true
+    },
+    app: {
+        title: 'Quality Metrics'
     }
 };

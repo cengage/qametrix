@@ -20,7 +20,7 @@ module.exports = function(app) {
 
     // Use Proxit for artifact graph
     // Put this before another middleware
-    app.use(proxit(config.proxit));
+    //app.use(proxit(config.proxit));
 
     // Should be placed before express.static
     // To ensure that all assets and data are compressed (utilize bandwidth)

@@ -1,7 +1,7 @@
 'use strict';
 
 //Setting up route
-angular.module('artifactGraph').config(['$stateProvider', '$urlRouterProvider',
+angular.module('sapience').config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
         // For unmatched routes:
         $urlRouterProvider.otherwise('/');
@@ -28,7 +28,7 @@ angular.module('artifactGraph').config(['$stateProvider', '$urlRouterProvider',
 ]);
 
 //Setting HTML5 Location Mode
-angular.module('artifactGraph').config(['$locationProvider',
+angular.module('sapience').config(['$locationProvider',
     function($locationProvider) {
         $locationProvider.hashPrefix('!');
     }

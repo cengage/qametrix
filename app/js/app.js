@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('artifactGraph', ['ngCookies', 'ngResource', 'ui.bootstrap', 'ui.router', 'artifactGraph.system', 'artifactGraph.artifacts']);
+angular.module('sapience', ['ngCookies', 'ngResource', 'ui.bootstrap', 'ui.router', 'sapience.system', 'sapience.artifacts']);
 
-angular.module('artifactGraph.system', []);
-angular.module('artifactGraph.artifacts', []);
+angular.module('sapience.system', []);
+angular.module('sapience.artifacts', []);

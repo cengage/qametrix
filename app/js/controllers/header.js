@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('artifactGraph.system').controller('HeaderController', ['$scope', 'Global',
+angular.module('sapience.system').controller('HeaderController', ['$scope', 'Global',
     function($scope, Global) {
         $scope.global = Global;
 

@@ -2,6 +2,6 @@
 
 module.exports = {
     app: {
-        title: 'Artifact Graph'
+        title: 'Quality Metrics Prod'
     }
 };

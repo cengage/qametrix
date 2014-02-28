@@ -5,7 +5,7 @@ var _ = require('lodash'),
     pathExtra = require('path-extra'),
     fs = require('fs');
 
-var userConfigFileName = pathExtra.homedir() + '/artifactgraph-' + process.env.NODE_ENV + '.json',
+var userConfigFileName = pathExtra.homedir() + '/sapience-' + process.env.NODE_ENV + '.json',
     userConfig = fs.existsSync(userConfigFileName) ? require(userConfigFileName) : {},
 
     // Extend the base configuration in all.js with environment

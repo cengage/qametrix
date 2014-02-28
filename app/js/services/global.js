@@ -1,7 +1,7 @@
 'use strict';
 
 //Global service for global variables
-angular.module('artifactGraph.system').factory('Global', [
+angular.module('sapience.system').factory('Global', [
 
     function() {
         return {};
