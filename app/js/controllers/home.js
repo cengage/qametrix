@@ -1,31 +1,21 @@
 'use strict';
 
-angular.module('sapience.system').controller('HomeController', ['$scope', 'Global', 
-    function($scope, Global) {
+angular.module('sapience.system').controller('HomeController', ['$scope', '$http','Global', 
+    function($scope, $http, Global) {
         $scope.global = Global;
 
-          $scope.applications = [
-    { id: 0,selected: false, name: 'In-Context',},
-    { id: 1,selected: false, name: 'NatGeo'},
-    { id: 2,selected: false, name: 'GVRL'},
-    { id: 3,selected: false, name: 'Smithsonian'},
-    { id: 4,selected: false, name: 'MindTap'},
-    { id: 5,selected: false, name: 'Ocean'},
-    { id: 6,selected: false, name: 'SAS'},
-    { id: 7,selected: false, name: 'CHOA'},
-    { id: 8,selected: false, name: 'GTX'}];
+      $scope.applications = [];
+
+    $http.get("http://localhost:3000/products")
+    .success(function(data, status, headers, config) {
+        data.forEach(function(product,index,array){
+          var product = {id:index,selected:false,name:product.name};
+          $scope.applications.push(product);
+        });
+    }).error(function(data, status, headers, config) {
+        $scope.status = status;
+    });
 		   
-  $scope.metricData = {};
-  $scope.metricData[$scope.applications[0].id] = {spider: [1,1,1,1,1,1,1],line: [11,92,83,14,25,36,47,58,9,10,11,12]};
-  $scope.metricData[$scope.applications[1].id] = {spider: [2,2,2,2,2,2,2],line: [21,82,63,24,15,26,47,58,69,10,11,12]};
-  $scope.metricData[$scope.applications[2].id] = {spider: [3,3,3,3,3,3,3],line: [31,72,73,4,45,16,27,58,69,70,11,12]};
-  $scope.metricData[$scope.applications[3].id] = {spider: [4,4,4,4,4,4,4],line: [41,62,53,24,85,6,17,28,69,70,81,12]};
-  $scope.metricData[$scope.applications[4].id] = {spider: [5,5,5,5,5,5,5],line: [51,52,23,4,75,66,7,18,29,70,81,92]};
-  $scope.metricData[$scope.applications[5].id] = {spider: [1,2,3,4,5,5,5],line: [61,42,33,64,5,6,77,58,19,50,81,92]};
-  $scope.metricData[$scope.applications[6].id] = {spider: [5,4,3,2,2,1,1],line: [71,32,43,54,5,86,7,8,19,40,61,12]};
-  $scope.metricData[$scope.applications[7].id] = {spider: [2,2,1,1,3,3,4],line: [81,22,33,44,35,96,7,38,29,10,51,72]};
-  $scope.metricData[$scope.applications[8].id] = {spider: [1,5,2,4,3,4,2],line: [91,12,13,4,5,26,7,68,95,107,41,62]};
-  
   $scope.spiderChartModel = {};
   $scope.lineChartModel = {};
   $scope.spiderChartModel.expectedSeries = {name:'Expected',data: [2,2,2,3,2,4,1]};
@@ -45,8 +35,9 @@ angular.module('sapience.system').controller('HomeController', ['$scope', 'Globa
 		$scope.spiderApplicationSeries.pop(applicationToPop);
 		$scope.lineApplicationSeries.pop(applicationToPop);
 	}
-    $scope.spiderChartModel.applicationSeries = $scope.spiderApplicationSeries;
-    $scope.lineChartModel.applicationSeries = $scope.lineApplicationSeries;
+  
+  $scope.spiderChartModel.applicationSeries = $scope.spiderApplicationSeries;
+  $scope.lineChartModel.applicationSeries = $scope.lineApplicationSeries;
 	$scope.buildSpiderChart($scope.spiderChartModel);
 	$scope.buildLineChart($scope.lineChartModel);
   }

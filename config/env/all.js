@@ -9,7 +9,7 @@ module.exports = {
     templateEngine: 'swig',
     proxit: {
         routes: {
-            '/sapience/service': 'http://localhost:3000/sapience/service'
+            '/sapience': 'http://localhost:3000'
         },
         verbose: true
     },
