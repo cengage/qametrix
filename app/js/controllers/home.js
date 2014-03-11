@@ -4,10 +4,11 @@ angular.module('sapience.system').controller('HomeController', ['$scope', '$http
     function($scope, $http, Global) {
         $scope.global = Global;
 
-      $scope.applications = [];
+    
 
     $http.get("http://localhost:3000/products")
     .success(function(data, status, headers, config) {
+        $scope.applications = [];
         data.forEach(function(product,index,array){
           var product = {id:index,selected:false,name:product.name};
           $scope.applications.push(product);
@@ -38,8 +39,9 @@ angular.module('sapience.system').controller('HomeController', ['$scope', '$http
 	application.selected = !application.selected;
 
 	if(application.selected){
-		$scope.spiderApplicationSeries.push({name:application.name, data: $scope.metricData[application.name],color:"#"+((1<<24)*Math.random()|0).toString(16)});		
-		$scope.lineApplicationSeries.push({name:application.name, data: $scope.metricData[application.name],color:"#"+((1<<24)*Math.random()|0).toString(16)});		
+    var randomColor = "#"+((1<<24)*Math.random()|0).toString(16);
+		$scope.spiderApplicationSeries.push({name:application.name, data: $scope.metricData[application.name],color:randomColor});		
+		$scope.lineApplicationSeries.push({name:application.name, data: $scope.metricData[application.name],color:randomColor});		
 	}else{
 		var applicationToPop = $.grep($scope.spiderApplicationSeries, function(e){ return e.name == application.name; });
 		$scope.spiderApplicationSeries.pop(applicationToPop);
@@ -75,11 +77,10 @@ angular.module('sapience.system').controller('HomeController', ['$scope', '$http
 	        type: 'line'
 			},
             title: {
-                text: 'Monthly Average Temperature',
+                text: 'Quality Metrics',
                 x: -20 //center
             },
             subtitle: {
-                text: 'Source: WorldClimate.com',
                 x: -20
             },
             xAxis: {
@@ -87,7 +88,7 @@ angular.module('sapience.system').controller('HomeController', ['$scope', '$http
             },
             yAxis: {
                 title: {
-                    text: '% Code Coverage'
+                    text: 'Count'
                 },
                 plotLines: [{
                     value: 0,
@@ -96,7 +97,7 @@ angular.module('sapience.system').controller('HomeController', ['$scope', '$http
                 }]
             },
             tooltip: {
-                valueSuffix: '%'
+                valueSuffix: ''
             },
             legend: {
                 layout: 'vertical',
@@ -118,7 +119,9 @@ angular.module('sapience.system').controller('HomeController', ['$scope', '$http
 	    },
 	    
 	    title: {
-	        text: 'Quality Metrics'
+	        text: 'Quality Metrics',
+          x: -50,
+          y: 50
 	    },
 	    
 	    xAxis: {

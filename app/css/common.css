@@ -8,6 +8,14 @@
     width:100%
 }
 
+.productLabel{
+    padding-right:20px;
+}
+
+#spiderChart{
+    height:600px;
+}
+
 footer {
     position:fixed;
     left:0px;
