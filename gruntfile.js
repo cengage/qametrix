@@ -33,7 +33,7 @@ module.exports = function(grunt) {
                 options: {
                     ext: 'js,json',
                     ignore: ['app/**'],
-                    nodeArgs: ['--debug']
+                    nodeArgs: ['--debug=8888']
                 }
             },
             prod: {
