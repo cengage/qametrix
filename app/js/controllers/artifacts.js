@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('artifactGraph.artifacts').controller('ArtifactsController', ['$scope', '$stateParams', '$location', 'Global', 'Artifacts',
+angular.module('sapience').controller('ArtifactsController', ['$scope', '$stateParams', '$location', 'Global', 'Artifacts',
     function($scope, $stateParams, $location, Global, Artifacts) {
 
         $scope.global = Global;

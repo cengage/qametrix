@@ -1,7 +1,7 @@
 'use strict';
 
 //Artifacts service used for artifacts REST endpoint
-angular.module('artifactGraph.artifacts').factory('Artifacts', ['$resource',
+angular.module('sapience').factory('Artifacts', ['$resource',
     function($resource) {
         return $resource('artifacts/:artifactName/:version', {
             artifactName: '@_id',
