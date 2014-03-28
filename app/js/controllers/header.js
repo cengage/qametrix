@@ -5,8 +5,8 @@ angular.module('sapience.system').controller('HeaderController', ['$scope', 'Glo
         $scope.global = Global;
 
         $scope.menu = [{
-            'title': 'Artifacts',
-            'link': 'artifacts'
+            'title': 'Home',
+            'link': '/'
         }];
 
         $scope.isCollapsed = false;
