@@ -7,8 +7,10 @@ var express = require('express'),
     consolidate = require('consolidate'),
     flash = require('connect-flash'),
     helpers = require('view-helpers'),
-    config = require('./config'),
-    proxit = require('proxit');
+    config = require('./config')
+    /*,
+    proxit = require('proxit')*/
+    ;
 
 module.exports = function(app) {
     app.set('showStackError', true);

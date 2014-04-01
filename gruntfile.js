@@ -86,6 +86,13 @@ module.exports = function(grunt) {
                     js: '<%= jsbeautifier.default.options.js%>'
                 }
             }
+        },
+        bower: {
+            install: {
+                options: {
+                    verbose: true
+                }
+            }
         }
     });
 
@@ -98,18 +105,19 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-env');
     grunt.loadNpmTasks('grunt-jsbeautifier');
+    grunt.loadNpmTasks('grunt-bower-task');
 
     //Making grunt default to force in order not to break the project.
     grunt.option('force', true);
 
     //Default task(s).
-    grunt.registerTask('default', [ /*'test',*/ 'jsbeautifier:default']);
+    grunt.registerTask('default', ['bower', /*'test',*/ 'jsbeautifier:default']);
 
     //Test task.
     grunt.registerTask('test', ['env:test', 'jshint', 'mochaTest', 'karma:unit']);
     grunt.registerTask('build', [ /*'test',*/ 'jsbeautifier:build']);
 
     // Server task
-    grunt.registerTask('server', ['jshint', 'concurrent']);
+    grunt.registerTask('server', ['bower', 'jshint', 'concurrent']);
     grunt.registerTask('server:prod', ['nodemon:prod']);
 };
