@@ -1,10 +1,6 @@
 'use strict';
 
-angular.module('sapience.system').controller('HomeController', ['$scope', '$http','Global', 
-    function($scope, $http, Global) {
-        $scope.global = Global;
-
-    
+angular.module('sapience.system').controller('HomeController', ['$scope', '$http', function($scope, $http) {
 
     $http.get("http://localhost:3000/products")
     .success(function(data, status, headers, config) {
@@ -23,7 +19,7 @@ angular.module('sapience.system').controller('HomeController', ['$scope', '$http
     }).error(function(data, status, headers, config) {
         $scope.status = status;
     });
-		   
+
   $scope.spiderChartModel = {};
   $scope.lineChartModel = {};
   $scope.spiderChartModel.expectedSeries = {name:'Expected',data: []};

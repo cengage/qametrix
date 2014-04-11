@@ -3,7 +3,8 @@
 /**
  * Module dependencies.
  */
-var express = require('express');
+var express = require('express'),
+    expressLoad = require('express-load');
 
 /**
  * Main application entry file.
@@ -21,6 +22,11 @@ var app = express();
 
 // Express settings
 require('./config/express')(app);
+
+// Bootstrap app
+expressLoad('server/routes', {
+    extlist: /(.*)\.(js$)/
+}).into(app);
 
 // Start the app by listening on <port>
 var port = process.env.PORT || config.port;

@@ -7,10 +7,9 @@ var express = require('express'),
     consolidate = require('consolidate'),
     flash = require('connect-flash'),
     helpers = require('view-helpers'),
-    config = require('./config')
-    /*,
-    proxit = require('proxit')*/
-    ;
+    config = require('./config'),
+    proxit = require('proxit'),
+    swig = require('swig');
 
 module.exports = function(app) {
     app.set('showStackError', true);
@@ -22,7 +21,7 @@ module.exports = function(app) {
 
     // Use Proxit for artifact graph
     // Put this before another middleware
-    //app.use(proxit(config.proxit));
+    app.use(proxit(config.proxit));
 
     // Should be placed before express.static
     // To ensure that all assets and data are compressed (utilize bandwidth)
@@ -38,6 +37,13 @@ module.exports = function(app) {
     // Only use logger for development environment
     if (process.env.NODE_ENV === 'development') {
         app.use(express.logger('dev'));
+        // Swig will cache templates for you, but you can disable
+        // that and use Express's caching instead, if you like:
+        app.set('view cache', false);
+        // To disable Swig's cache, do the following:
+        swig.setDefaults({
+            cache: false
+        });
     }
 
     // assign the template engine to .html files
@@ -47,15 +53,7 @@ module.exports = function(app) {
     app.set('view engine', 'html');
 
     // Set views path, template engine and default layout
-    app.set('views', config.root + '/app/views');
-
-    /**
-     * Home route is required only for ui and not for service.
-     * */
-    // Home route
-    app.get('/', function(req, res) {
-        res.render('index', config.app);
-    });
+    app.set('views', config.root + '/public/views');
 
     // Enable jsonp
     app.enable('jsonp callback');
@@ -80,7 +78,7 @@ module.exports = function(app) {
 
         // Setting the fav icon and static folder
         app.use(express.favicon());
-        app.use(express.static(config.root + '/app'));
+        app.use(express.static(config.root + '/public'));
 
         // Assume "not found" in the error message is a 404. this is somewhat
         // silly, but valid, you can do whatever you like, set properties,

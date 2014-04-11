@@ -27,7 +27,6 @@ module.exports = function(config) {
             'app/js/filters.js',
             'app/js/services/global.js',
             'app/js/services/artifacts.js',
-            'app/js/controllers/artifacts.js',
             'app/js/controllers/home.js',
             'app/js/controllers/header.js',
             'app/js/init.js',

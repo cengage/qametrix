@@ -9,19 +9,19 @@ module.exports = function(grunt) {
                 livereload: 35730
             },
             js: {
-                files: ['gruntfile.js', 'server.js', 'app/js/**', 'test/**/*.js'],
+                files: ['gruntfile.js', 'server.js', 'public/js/**', 'public/modules/**/*.js', 'test/**/*.js'],
                 tasks: ['jshint']
             },
             html: {
-                files: ['app/views/**']
+                files: ['app/views/**', 'app/modules/**/*.html']
             },
             css: {
-                files: ['app/css/**']
+                files: ['app/css/**', 'app/modules/**/*.css']
             }
         },
         jshint: {
             all: {
-                src: ['gruntfile.js', 'package.json', 'server.js', 'app/js/*.js', 'config/**/*.js', 'test/**/*.js', '!test/coverage/**/*.js'],
+                src: ['gruntfile.js', 'package.json', 'server.js', 'public/js/*.js', 'config/**/*.js', 'test/**/*.js', '!test/coverage/**/*.js'],
                 options: {
                     jshintrc: true
                 }
@@ -32,7 +32,7 @@ module.exports = function(grunt) {
                 script: 'server.js',
                 options: {
                     ext: 'js,json',
-                    ignore: ['app/**'],
+                    ignore: ['public/**'],
                     nodeArgs: ['--debug=8888']
                 }
             },
@@ -71,7 +71,7 @@ module.exports = function(grunt) {
         },
         jsbeautifier: {
             'default': {
-                src: '<%= jshint.all.src %>',
+                src: ['<%= jshint.all.src %>', 'bower.json'],
                 options: {
                     js: {
                         preserveNewlines: true,
@@ -111,11 +111,15 @@ module.exports = function(grunt) {
     grunt.option('force', true);
 
     //Default task(s).
-    grunt.registerTask('default', ['bower', /*'test',*/ 'jsbeautifier:default']);
+    grunt.registerTask('default', ['bower', 'test', 'jsbeautifier:default']);
 
-    //Test task.
-    grunt.registerTask('test', ['env:test', 'jshint', 'mochaTest', 'karma:unit']);
-    grunt.registerTask('build', [ /*'test',*/ 'jsbeautifier:build']);
+    // Test task.
+    grunt.registerTask('test', function() {
+        grunt.option('force', false);
+        grunt.task.run('env:test', 'jshint' /*, 'mochaTest', 'karma:unit'*/ );
+    });
+
+    grunt.registerTask('build', ['test', 'jsbeautifier:build']);
 
     // Server task
     grunt.registerTask('server', ['bower', 'jshint', 'concurrent']);
