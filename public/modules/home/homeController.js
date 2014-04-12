@@ -2,7 +2,7 @@
 
 angular.module('sapience.system').controller('HomeController', ['$scope', '$http', function($scope, $http) {
 
-    $http.get("http://localhost:3000/products")
+    $http.get("sapience/products")
     .success(function(data, status, headers, config) {
         $scope.applications = [];
         data.forEach(function(product,index,array){
@@ -13,7 +13,7 @@ angular.module('sapience.system').controller('HomeController', ['$scope', '$http
         $scope.status = status;
     });
 
-    $http.get("http://localhost:3000/metrics")
+    $http.get("sapience/metrics")
     .success(function(data, status, headers, config) {
         $scope.loadMetrics(data);
     }).error(function(data, status, headers, config) {
