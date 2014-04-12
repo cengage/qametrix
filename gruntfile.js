@@ -13,10 +13,10 @@ module.exports = function(grunt) {
                 tasks: ['jshint']
             },
             html: {
-                files: ['app/views/**', 'app/modules/**/*.html']
+                files: ['public/views/**', 'public/modules/**/*.html']
             },
             css: {
-                files: ['app/css/**', 'app/modules/**/*.css']
+                files: ['public/css/**', 'public/modules/**/*.css']
             }
         },
         jshint: {

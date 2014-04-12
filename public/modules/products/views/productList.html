@@ -1,5 +1,5 @@
 <div data-ng-controller="ProductListController">
-    <div class="table-responsive">
+    <div class="table-responsive" data-ng-show="products.length > 0">
         <table class="table table-hover">
             <thead>
             <tr>
@@ -9,10 +9,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="product in products">
-                <td>{{$index}}</td>
+            <tr data-ng-repeat="product in products" data-ng-mouseenter="product.showDelete = true" data-ng-mouseleave="product.showDelete = false">
+                <td>{{$index + 1}}</td>
                 <td>{{product.name}}</td>
-                <!--<td><button type="button" class="btn btn-danger" data-ng-click="delete(product)">Delete</td>-->
+                <!--<td><button data-ng-class="{invisible:!product.showDelete}" type="button" class="invisible btn btn-link btn-xs" data-ng-click="delete(product)"><span class="glyphicon glyphicon-trash"></span></button></td>-->
             </tr>
             </tbody>
         </table>
