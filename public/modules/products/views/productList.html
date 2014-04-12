@@ -2,18 +2,18 @@
     <div class="table-responsive" data-ng-show="products.length > 0">
         <table class="table table-hover">
             <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <!--<th></th>-->
-            </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <!--<th></th>-->
+                </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="product in products" data-ng-mouseenter="product.showDelete = true" data-ng-mouseleave="product.showDelete = false">
-                <td>{{$index + 1}}</td>
-                <td>{{product.name}}</td>
-                <!--<td><button data-ng-class="{invisible:!product.showDelete}" type="button" class="invisible btn btn-link btn-xs" data-ng-click="delete(product)"><span class="glyphicon glyphicon-trash"></span></button></td>-->
-            </tr>
+                <tr data-ng-repeat="product in products" data-ng-mouseenter="product.showDelete = true" data-ng-mouseleave="product.showDelete = false">
+                    <td>{{$index + 1}}</td>
+                    <td>{{product.name}}</td>
+                    <!--<td><button data-ng-class="{invisible:!product.showDelete}" type="button" class="invisible btn btn-link btn-xs" data-ng-click="delete(product)"><span class="glyphicon glyphicon-trash"></span></button></td>-->
+                </tr>
             </tbody>
         </table>
     </div>
