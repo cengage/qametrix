@@ -25,7 +25,8 @@ require('./config/express')(app);
 
 // Bootstrap app
 expressLoad('server/routes', {
-    extlist: /(.*)\.(js$)/
+    extlist: /(.*)\.(js$)/,
+    cwd: __dirname
 }).into(app);
 
 // Start the app by listening on <port>
