@@ -93,11 +93,13 @@ module.exports = function(grunt) {
                     verbose: true
                 }
             }
-        }
+        },
+        clean: ['./test/*.js']
     });
 
     //Load NPM tasks
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-karma');
@@ -119,7 +121,10 @@ module.exports = function(grunt) {
         grunt.task.run('env:test', 'jshint' /*, 'mochaTest', 'karma:unit'*/ );
     });
 
-    grunt.registerTask('build', ['test', 'jsbeautifier:build']);
+    grunt.registerTask('build', ['clear', 'test', 'jsbeautifier:build']);
+
+    // Clean the project
+    grunt.registerTask('clear', ['clean']);
 
     // Server task
     grunt.registerTask('server', ['bower', 'jshint', 'concurrent']);
