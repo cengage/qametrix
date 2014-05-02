@@ -4,12 +4,15 @@ angular.module('sapience.system').controller('HeaderController', ['$scope', func
 
         $scope.menu = [{
             'title': 'Home',
-            'link': '/'
+            'state': 'HOME'
+        },{
+            'title': 'Dashboard',
+            'state': 'DASHBOARD'
         },{
             'title': 'Products',
-            'link': 'products'
+            'state': 'PRODUCT-LIST'
         }];
 
-        $scope.isCollapsed = false;
+        $scope.isCollapsed = true;
     }
 ]);

@@ -1,0 +1,11 @@
+<section data-ng-controller="ProductSelectorController">
+    <ul class="list-group">
+        <li class="list-group-item" data-ng-repeat="product in products">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="product" value="{{product.id}}" data-ng-click="productSelected(product)" />{{product.name}}
+                </label>
+            </div>
+        </li>
+    </ul>
+</section>

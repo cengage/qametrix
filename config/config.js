@@ -6,14 +6,16 @@ var _ = require('lodash'),
     fs = require('fs');
 
 var userConfigFileName = pathExtra.homedir() + '/sapience-' + process.env.NODE_ENV + '.json',
+    envConfigFileName = __dirname + '/../config/env/' + process.env.NODE_ENV + '.js',
     userConfig = fs.existsSync(userConfigFileName) ? require(userConfigFileName) : {},
 
     // Extend the base configuration in all.js with environment
     // specific configuration
     config = _.extend(
         require(__dirname + '/../config/env/all.js'),
-        require(__dirname + '/../config/env/' + process.env.NODE_ENV + '.js') || {},
+        fs.existsSync(envConfigFileName) ? require(envConfigFileName) : {},
         userConfig
     );
+
 delete config.db;
 module.exports = config;

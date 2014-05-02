@@ -34,18 +34,6 @@ module.exports = function(app) {
         level: 9
     }));
 
-    // Only use logger for development environment
-    if (process.env.NODE_ENV === 'development') {
-        app.use(express.logger('dev'));
-        // Swig will cache templates for you, but you can disable
-        // that and use Express's caching instead, if you like:
-        app.set('view cache', false);
-        // To disable Swig's cache, do the following:
-        swig.setDefaults({
-            cache: false
-        });
-    }
-
     // assign the template engine to .html files
     app.engine('html', consolidate[config.templateEngine]);
 
@@ -73,12 +61,24 @@ module.exports = function(app) {
         // Connect flash for flash messages
         app.use(flash());
 
-        // Routes should be at the last
-        app.use(app.router);
-
         // Setting the fav icon and static folder
         app.use(express.favicon());
         app.use(express.static(config.root + '/public'));
+
+        // Only use logger for development environment
+        if (process.env.NODE_ENV === 'local') {
+            app.use(express.logger('dev'));
+            // Swig will cache templates for you, but you can disable
+            // that and use Express's caching instead, if you like:
+            app.set('view cache', false);
+            // To disable Swig's cache, do the following:
+            swig.setDefaults({
+                cache: false
+            });
+        }
+
+        // Routes should be at the last
+        app.use(app.router);
 
         // Assume "not found" in the error message is a 404. this is somewhat
         // silly, but valid, you can do whatever you like, set properties,

@@ -4,13 +4,23 @@
 angular.module('sapience').config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
         // For unmatched routes:
-        $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.otherwise('/DASHBOARD');
 
         // states for my app
-        $stateProvider.state('List of products', {
+        $stateProvider.state('PRODUCT-LIST', {
             url: '/products',
             templateUrl: 'modules/products/views/productList.html'
-        }).state('home', {
+        }).state('DASHBOARD', {
+            url: '/dashboard',
+            views: {
+                '@': {
+                    templateUrl: 'modules/dashboard/views/dashboard.html'
+                },
+                'sidebar@DASHBOARD': {
+                    templateUrl: 'modules/productSelector/views/productSelector.html'
+                }
+            }
+        }).state('HOME', {
             url: '/',
             templateUrl: 'modules/home/views/home.html'
         });

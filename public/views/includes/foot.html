@@ -21,8 +21,11 @@
 <script type="text/javascript" src="js/routes.js"></script>
 
 <!-- Home Module -->
-<script type="text/javascript" src="modules/home/homeController.js"></script>
 <script type="text/javascript" src="modules/home/headerController.js"></script>
+
+<!-- Dashboard Module -->
+<script type="text/javascript" src="modules/productSelector/productSelectorController.js"></script>
+<script type="text/javascript" src="modules/dashboard/dashboardController.js"></script>
 
 <!-- Product Module -->
 <script type="text/javascript" src="modules/products/productListController.js"></script>
@@ -32,7 +35,7 @@
 <!-- Initialize the application -->
 <script type="text/javascript" src="js/init.js"></script>
 
-{% if (process.env.NODE_ENV == 'development') %}
+{% if (process.env.NODE_ENV == 'local') %}
 <!-- Livereload script rendered -->
 <script type="text/javascript" src="http://localhost:35730/livereload.js"></script>
 {% endif %}

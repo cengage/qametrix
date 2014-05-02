@@ -13,15 +13,15 @@ module.exports = function(grunt) {
                 tasks: ['jshint']
             },
             html: {
-                files: ['public/views/**', 'public/modules/**/*.html']
+                files: ['public/**/*.html']
             },
             css: {
-                files: ['public/css/**', 'public/modules/**/*.css']
+                files: ['public/**/*.css']
             }
         },
         jshint: {
             all: {
-                src: ['gruntfile.js', 'package.json', 'server.js', 'public/js/*.js', 'config/**/*.js', 'test/**/*.js', '!test/coverage/**/*.js'],
+                src: ['gruntfile.js', 'package.json', 'bower.json', 'server.js', 'public/js/*.js', 'config/**/*.js', 'test/**/*.js', '!test/coverage/**/*.js'],
                 options: {
                     jshintrc: true
                 }
