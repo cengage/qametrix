@@ -12,8 +12,23 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 
     $scope.spiderApplicationSeries = [];
     $scope.lineApplicationSeries = [];
-
+    
     $rootScope.$on('productSelection', function(event, application) {
+    	$scope.productName=application.name;
+    	$scope.cateogories= [{
+    		'name': application.name,
+            'value': 'Code Quality' 
+        },{
+        	'name': 'Project Tracking',
+            'value': 'Project Tracking'
+        },{
+        	'name': 'Defect Metrics',
+            'value': 'Defect Metrics'
+        }];
+    });
+    
+
+    $scope.applicationSelected=function(application) {
 
         application.selected = !application.selected;
 
@@ -33,21 +48,24 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
         $scope.lineChartModel.applicationSeries = $scope.lineApplicationSeries;
         $scope.buildSpiderChart($scope.spiderChartModel);
         $scope.buildLineChart($scope.lineChartModel);
-    });
+    };
 
     $scope.loadMetrics = function(metrics) {
         $scope.metricData = {};
         $scope.spiderChartModel.categories = [];
         $scope.lineChartModel.categories = [];
         metrics.forEach(function(metric) {
-            $scope.spiderChartModel.categories.push(metric.category.name);
-            $scope.lineChartModel.categories.push(metric.category.name);
-            if (metric.product.name in $scope.metricData) {
-                $scope.metricData[metric.product.name] = $scope.metricData[metric.product.name].concat([metric.value]);
-            } else {
-                $scope.metricData[metric.product.name] = [metric.value];
-            }
-
+        	if(metric.category.connector=='533e2a5bb34b99201ee85345'){
+        	
+        		$scope.spiderChartModel.categories.push(metric.category.name);
+        		$scope.lineChartModel.categories.push(metric.category.name);
+        		if (metric.product.name in $scope.metricData) {
+        			$scope.metricData[metric.product.name] = $scope.metricData[metric.product.name].concat([metric.value]);
+        		} else {
+        			$scope.metricData[metric.product.name] = [metric.value];
+        		}
+            
+        	}
         });
     };
 
