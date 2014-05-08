@@ -31,7 +31,7 @@
         "swig": "~1.3.2",
         "proxit": "0.3.3",
         "path-extra": "~0.1.1",
-        "express-load": "git://github.com/vkadam/express-load.git#master"
+        "express-load": "~1.1.12"
     },
     "devDependencies": {
         "supertest": "0.8.2",
