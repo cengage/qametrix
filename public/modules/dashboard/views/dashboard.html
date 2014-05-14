@@ -1,17 +1,17 @@
-<section>
-	<section class="col-sm-3" data-ui-view="sidebar"></section>
-	<div class="col-sm-9" data-ng-controller="dashboardController">
-	<div class="productNameFontColor">{{productName}}</div>
-	<div class="btn-group btn-group-justified" style="margin-bottom: 10px; margin-top: 10px">
-		
-		<div ng-repeat="application in cateogories" class="btn-group">
+<div class="row">
+	<div class="col-sm-3 col-md-3 sidebar bg-info" data-ui-view="sidebar"></div>
+	<div class="col-sm-9 col-md-9 main" data-ng-controller="dashboardController">
+	
+	<div>
+		<div data-ng-repeat="application in cateogories" class="checkbox-inline">
 			<div>
-				<label class="headerFontColor"> <input type="checkbox" data-ng-click="applicationSelected(application)">{{application.value}}
+				<label> <input type="checkbox" data-ng-click="applicationSelected(application)">{{application.value}}
 				</label>
 			</div>
 		</div>
 	</div>
+	<hr>
 		<div id="spiderChart"></div>
 		<div id="lineChart"></div>
 	</div>
-</section>
+</div>

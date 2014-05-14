@@ -1,49 +1,71 @@
-<section data-ng-controller="ProductSelectorController">
+<section data-ng-controller="ProductSelectorController" class="nav nav-sidebar">
 
-<div class="thumbnail" >
- <label ng-click="isCollapsed1= !isCollapsed1" class="headerFontColor">Products<span class="glyphicon glyphicon-list-alt" style="margin-left: 160px"></span></label>
-      <hr>
-      <div id="collapse1" collapse="!isCollapsed1">
-        <ul class="list-group">
-			<li class="dropdown-submenu list-group-item" data-ng-repeat="platform in platforms" >
-			 
-			<a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{platform.name}} </a>
-			    
-    		<ul class="dropdown-menu">
-      			
-      			<li class="list-group" data-ng-repeat="product in products">
-            		<div class="checkbox" style="padding-left: 25px;">
-                		<label>
-                    		<a name="product" value="{{product.id}}" data-ng-click="productSelected(product)">{{product.name}} </a><hr>
-                		</label>
-            		</div>
-        		</li>
-           		
-    		</ul>
-    		<!-- <hr> -->
-  			</li>
-    </ul>
-      </div>
-</div>
-
-<div class="thumbnail">
- <label ng-click="isCollapsed2= !isCollapsed2" class="headerFontColor">Practices<span class="glyphicon glyphicon-list-alt" style="margin-left: 156px"></span></label>
- <hr>
- <div id="collapse2" collapse="!isCollapsed2">
- 	<ul class="list-group">
-      <li data-ng-repeat="practice in practices" class="list-group-item">
-                <a data-ng-click="">{{practice.name}}</a>
-            </li>
-     </ul>
- </div>
-</div>
-
-<div class="thumbnail">
- <label ng-click="isCollapsed3= !isCollapsed3" class="headerFontColor">People<span class="glyphicon glyphicon-list-alt" style="margin-left: 172px"></span></label>
-      <hr>
-      <div id="collapse3" collapse="!isCollapsed3">
-          
-      </div>
-</div>
-
+	<div class="panel-group" id="accordion">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<label id="label1" data-toggle="collapse" data-parent="#accordion"
+						ng-click="isCollapsed1= !isCollapsed1" class="dropdown-toggle"><i
+						class="icon-large toggle-arrow"></i>Products</label>
+				</h4>
+			</div>
+			<div id="isCollapsed1" collapse="isCollapsed1">
+				<div class="panel-body">
+					<table class="table" >
+						<tr data-ng-repeat="platform in platforms">
+							    <td> <span class="text-primary"></span>
+							    <a><div data-ng-click="fetchProducts(platform);isCollapsed2= !isCollapsed2" class="glyphicon glyphicon-chevron-right" data-toggle="class"> <b>{{platform.name}}</b></div></a>
+								      <div id="isCollapsed2" collapse="!isCollapsed2" data-ng-repeat="product in filteredProducts" class="checkbox"> 
+								      	 <ul>
+								      	 <label>
+								      	 
+								      	 <input type="checkbox" data-ng-click="productSelected(product)"> {{product.name}}
+								      	 
+								      	 </label>
+										 </ul>
+									</div>
+								</td>
+						</tr>
+						
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="panel-group" id="accordion">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<label id="label1" data-toggle="collapse" data-parent="#accordion"
+						ng-click="isCollapsedTwo= !isCollapsedTwo" class="dropdown-toggle"><i
+						class="icon-large toggle-arrow"></i>Practices</label>
+				</h4>
+			</div>
+			<div id="isCollapsedTwo" collapse="!isCollapsedTwo">
+				<div class="panel-body">
+					<table class="table" >
+						<tr data-ng-repeat="practice in practices">
+							    <td> <span class="text-primary"></span>
+							    	<a><div class="glyphicon glyphicon-chevron-right" data-toggle="class"> {{practice.name}}</div></a>
+								</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="panel-group" id="accordion">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					<label id="label1" data-toggle="collapse" data-parent="#accordion"
+						class="dropdown-toggle"><i
+						class="icon-large toggle-arrow"></i>People</label>
+				</h4>
+			</div>
+			
+		</div>
+	</div>
 </section>

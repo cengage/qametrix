@@ -2,7 +2,10 @@
 
 angular.module('sapience.charts').controller('dashboardController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
     $http.get('sapience/metrics').success(function(data) {
-        $scope.loadMetrics(data);
+    	$scope.mainMetrics=[];
+    	$scope.mainMetrics=data;
+    	console.log('Main metrics data is : '+$scope.mainMetrics);
+        /*$scope.loadMetrics(data);*/
     });
 
     $scope.spiderChartModel = {};
@@ -14,28 +17,56 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     $scope.lineApplicationSeries = [];
     
     $rootScope.$on('productSelection', function(event, application) {
-    	$scope.productName=application.name;
+    	console.log('application or product id is : '+application.id);
     	$scope.cateogories= [{
     		'name': application.name,
-            'value': 'Code Quality' 
+            'value': 'Code Quality',
+            'selected':false,
+            'connectorId': '531be23471154d0000b07505,533e2a5bb34b99201ee85345' // code quality for Clover or Sonar connectors
         },{
-        	'name': 'Project Tracking',
-            'value': 'Project Tracking'
+        	'name': application.name,
+            'value': 'Project Tracking',
+            'selected':false,
+            'connectorId': '533a3dfef48d45e41873a7a9' // project Tracking for Jenkin connector
         },{
-        	'name': 'Defect Metrics',
-            'value': 'Defect Metrics'
+        	'name': application.name,
+            'value': 'Defect Metrics',
+            'selected':false,
+            'connectorId': '531be20171154d0000b07504' // defect metrics for Jira connector
         }];
     });
     
-
     $scope.applicationSelected=function(application) {
+    	
+    	 $scope.metricData = {};
+    	 $scope.spiderChartModel.categories = [];
+    	 $scope.lineChartModel.categories = [];
+         
+         $scope.mainMetrics.forEach(function(metric) {
+        	var selectedConnectors=application.connectorId.split(',');
+        	selectedConnectors.forEach(function(selectedConnector) {
+        	
+         	if(metric.category.connector==selectedConnector){
+         		
+         		$scope.spiderChartModel.categories.push(metric.category.name);
+         		$scope.lineChartModel.categories.push(metric.category.name);
+         		if (metric.product.name in $scope.metricData) {
+         			$scope.metricData[metric.product.name] = $scope.metricData[metric.product.name].concat([metric.value]);
+         		} else {
+         			$scope.metricData[metric.product.name] = [metric.value];
+         		}
+         	}
+         		
+         	});
+         		
+         });
 
         application.selected = !application.selected;
 
         if (application.selected) {
             var randomColor = '#' + ((1 << 24) * Math.random() | 0).toString(16);
-            $scope.spiderApplicationSeries.push({name: application.name, data: $scope.metricData[application.name], color: randomColor});
-            $scope.lineApplicationSeries.push({name: application.name, data: $scope.metricData[application.name], color: randomColor});
+            $scope.spiderApplicationSeries.push({name: application.value, data: $scope.metricData[application.name], color: randomColor});
+            $scope.lineApplicationSeries.push({name: application.value, data: $scope.metricData[application.name], color: randomColor});
         } else {
             var applicationToPop = $.grep($scope.spiderApplicationSeries, function(e) {
                 return e.name == application.name;
@@ -48,25 +79,6 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
         $scope.lineChartModel.applicationSeries = $scope.lineApplicationSeries;
         $scope.buildSpiderChart($scope.spiderChartModel);
         $scope.buildLineChart($scope.lineChartModel);
-    };
-
-    $scope.loadMetrics = function(metrics) {
-        $scope.metricData = {};
-        $scope.spiderChartModel.categories = [];
-        $scope.lineChartModel.categories = [];
-        metrics.forEach(function(metric) {
-        	if(metric.category.connector=='533e2a5bb34b99201ee85345'){
-        	
-        		$scope.spiderChartModel.categories.push(metric.category.name);
-        		$scope.lineChartModel.categories.push(metric.category.name);
-        		if (metric.product.name in $scope.metricData) {
-        			$scope.metricData[metric.product.name] = $scope.metricData[metric.product.name].concat([metric.value]);
-        		} else {
-        			$scope.metricData[metric.product.name] = [metric.value];
-        		}
-            
-        	}
-        });
     };
 
     $scope.buildLineChart = function(lineChartModel) {
