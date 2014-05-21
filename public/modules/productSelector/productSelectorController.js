@@ -4,7 +4,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     $http.get('sapience/products').success(function(data) {
     	$scope.products = [];
         data.forEach(function(product, index) {
-            var product = {id: index, selected: false, name: product.name,platform: product.platform};
+            var product = {'id': index, 'selected':false, 'name': product.name,'platform': product.platform};
             $scope.products.push(product);
         });
     });
@@ -20,6 +20,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     });
     
     $scope.fetchProducts=function(platform){
+    	
     	$scope.filteredProducts=[];
     	$scope.products.forEach(function(product,index){
     		if(product.platform==platform.id){
@@ -29,6 +30,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     };
     
     $scope.productSelected = function(application) {
+	    
         $rootScope.$broadcast('productSelection', application);
     };
     
