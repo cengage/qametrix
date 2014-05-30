@@ -5,6 +5,7 @@
 	<div>
 		<div data-ng-repeat="application in cateogories" class="checkbox-inline">
 			<div>
+			 <!--  direct fetch graph by category (FGBC) , when product is already selected then check the category -->
 				<label> <input type="checkbox" data-ng-click="applicationSelected(application,'directFGBC')">{{application.value}}
 				</label>
 			</div>

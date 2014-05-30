@@ -1,21 +1,16 @@
 <section data-ng-controller="ProductSelectorController" class="nav nav-sidebar">
 
-	<div class="panel-group" id="accordion">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h4 class="panel-title">
-					<label id="label1" data-toggle="collapse" data-parent="#accordion"
-						ng-click="isCollapsed1= !isCollapsed1" class="dropdown-toggle"><i
-						class="icon-large toggle-arrow"></i>Products</label>
-				</h4>
-			</div>
-			<div id="isCollapsed1" collapse="isCollapsed1">
-				<div class="panel-body">
+<accordion close-others="true">
+    <accordion-group is-open="true" is-disabled="status.isFirstDisabled">
+    	<accordion-heading>
+    	<b>Platforms / Products</b>
+    	</accordion-heading>
+      <div>
 					<table class="table" >
-						<tr data-ng-repeat="platform in platforms">
+						<tr data-ng-repeat="platform in platforms | orderBy : 'name'">
 							    <td> <span class="text-primary"></span>
 							    <a><div data-ng-click="fetchProducts(platform);isCollapsed2= !isCollapsed2" class="glyphicon glyphicon-chevron-right" data-toggle="class"> <b>{{platform.name}}</b></div></a>
-								      <div id="isCollapsed2" collapse="!isCollapsed2" data-ng-repeat="product in filteredProducts" class="checkbox"> 
+								      <div id="isCollapsed2" collapse="!isCollapsed2" data-ng-repeat="product in filteredProducts | orderBy : 'name'" class="checkbox"> 
 								      	 <ul>
 								      	 <label class="checkbox-inline">
 								      	 
@@ -26,24 +21,14 @@
 									</div>
 								</td>
 						</tr>
-						
 					</table>
-				</div>
-			</div>
 		</div>
-	</div>
-	
-	<div class="panel-group" id="accordion">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h4 class="panel-title">
-					<label id="label1" data-toggle="collapse" data-parent="#accordion"
-						ng-click="isCollapsedTwo= !isCollapsedTwo" class="dropdown-toggle"><i
-						class="icon-large toggle-arrow"></i>Practices</label>
-				</h4>
-			</div>
-			<div id="isCollapsedTwo" collapse="!isCollapsedTwo">
-				<div class="panel-body">
+    </accordion-group>
+    <accordion-group>
+    <accordion-heading>
+    	<b>Practices</b>
+    	</accordion-heading>
+      <div>
 					<table class="table" >
 						<tr data-ng-repeat="practice in practices">
 							    <td> <span class="text-primary"></span>
@@ -51,23 +36,23 @@
 								</td>
 						</tr>
 					</table>
-				</div>
 			</div>
-		</div>
-	</div>
-	
-	
-	
-	<div class="panel-group" id="accordion">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h4 class="panel-title">
-					<label id="label1" data-toggle="collapse" data-parent="#accordion"
-						class="dropdown-toggle"><i
-						class="icon-large toggle-arrow"></i>People</label>
-				</h4>
-			</div>
-			
-		</div>
-	</div>
+    </accordion-group>
+    <accordion-group>
+    <accordion-heading>
+    	<b>People</b>
+    	</accordion-heading>
+     People content here
+     <accordion-group>
+     <accordion-heading>
+    	<b>inside it</b>
+    	</accordion-heading>
+      	<accordion-group>
+      	child form
+      	</accordion-group>
+     </accordion-group>
+    </accordion-group>
+  </accordion>
+
+<br/>
 </section>

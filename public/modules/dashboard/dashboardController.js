@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('sapience.charts').controller('dashboardController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
+angular.module('sapience.charts').controller('dashboardController', ['$rootScope', '$scope', '$http', '$filter', function($rootScope, $scope, $http, $filter) {
     $http.get('sapience/metrics').success(function(data) {
     	$scope.mainMetrics=[];
     	$scope.mainMetrics=data;
@@ -62,6 +62,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     		
     		$scope.cateogories.forEach(function(category){
     			if(category.selected){
+    				 // direct fetch graph by product (FGBP) , when category is alreay selected then check the product
     				$scope.applicationSelected(category,'directFGBP');
     			}
     		});
@@ -79,46 +80,132 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 		$scope.lineApplicationSeries = [];
 		   
 		 $scope.metricData = {};
+		 // List of dated
+		 $scope.dateWiseMetricData={};
+		 
 		 $scope.spiderChartModel.categories = [];
 		 $scope.lineChartModel.categories = [];
-
+		 var repeat=0;
+		 var nonRepeative=0;
+		 
 		 $scope.mainMetrics.forEach(function(metric) {
 			 var selectedConnectors=application.connectorId.split(',');
 			 selectedConnectors.forEach(function(selectedConnector) {
 
 				 if(metric.category.connector==selectedConnector){
- 		
-					 $scope.spiderChartModel.categories.push(metric.category.name);
-					 $scope.lineChartModel.categories.push(metric.category.name);
-					 if (metric.product.name in $scope.metricData) {
-						 $scope.metricData[metric.product.name] = $scope.metricData[metric.product.name].concat([metric.value]);
-					 } else {
-						 $scope.metricData[metric.product.name] = [metric.value];
+					 
+					 if($scope.spiderChartModel.categories==[]){
+						 $scope.spiderChartModel.categories.push(metric.category.name+'-'+metric.category.position);
+						 $scope.lineChartModel.categories.push(metric.category.name+'-'+metric.category.position);
 					 }
+					 
+					 var check=false;
+					 $scope.spiderChartModel.categories.forEach(function(eachCategory){
+						 if(metric.category.name+'-'+metric.category.position==eachCategory){
+							 check=true;
+						 }
+					 });
+					 if(check==false){
+						 nonRepeative=nonRepeative+1;
+						 console.log('inside non repeativ '+nonRepeative);
+						 $scope.spiderChartModel.categories.push(metric.category.name+'-'+metric.category.position);
+						 $scope.lineChartModel.categories.push(metric.category.name+'-'+metric.category.position);
+					 }
+ 		
+				      var ProductWithDate=metric.product.name +'_'+$filter('date')(metric.created, "dd/MM/yyyy");
+				     
+					  if(metric.product.name in $scope.dateWiseMetricData){
+							console.log('inside repeative product');
+							$scope.dateWiseMetricData[metric.product.name]=$scope.dateWiseMetricData[metric.product.name].concat([ProductWithDate +'_'+ metric.value+'-'+metric.category.position]);
+							
+					  }else{
+							console.log('inside separate product :'+ ProductWithDate);
+							$scope.dateWiseMetricData[metric.product.name]=[ProductWithDate +'_'+ metric.value+'-'+metric.category.position];
+							
+					  }
 				 }
  		
 			 });
 
 		 });
 		 
-		 console.log('we are here now , check application selected: '+application.selected);
-		 
 		 if(fetchBy=='directFGBC'){
 			 application.selected = !application.selected;
 		 }
 
 		 if (application.selected) {
+			 
+			 /*sorting category name*/
+			$scope.spiderChartModel.categoryArray=[];
+			$scope.lineChartModel.categoryArray=[];
+			$scope.categoryAList={};
+			
+			console.log('Initial category list is : '+$scope.spiderChartModel.categories);
+				
+			$scope.spiderChartModel.categories.forEach(function(spCat){
+				console.log('cat pos is : '+spCat.split('-')[1]);
+				console.log('cat name is : '+spCat.split('-')[0]);
+				$scope.categoryAList[spCat.split('-')[1]]=spCat.split('-')[0];
+			});
+			
+			console.log('filtered value at pos is : '+$scope.categoryAList[4]);
+			 
+			for(var j=1;$scope.categoryAList[j]!=undefined;j++){
+				$scope.spiderChartModel.categoryArray.push($scope.categoryAList[j]);
+				$scope.lineChartModel.categoryArray.push($scope.categoryAList[j]);
+			}
+			
+			console.log('final sorted category name is : '+$scope.categoryArray);
 
-			 console.log('product selected are :'+$scope.applicationList);
+			// end of sorting category
+			
 			 $scope.applicationList.forEach(function(productApplication){
 			 
+			var DWProductsList=$scope.dateWiseMetricData[productApplication];
+
+			var dateWiseProductWithValues=DWProductsList.toString().split(',');
+			
+			$scope.dateWisePValue={};
+			$scope.dateWisePNames=[];
+			
+			dateWiseProductWithValues.forEach(function(dateWiseProduct) {
+				var pdList=dateWiseProduct.split('_');
+				var nameAndDate=(pdList[0]+'_'+pdList[1]).toString();
+				console.log('pdList value is :' +pdList[2]);
+				if(nameAndDate in $scope.dateWisePValue){
+					$scope.dateWisePValue[nameAndDate]=$scope.dateWisePValue[nameAndDate].concat([pdList[2]]);
+				}
+				else{
+					$scope.dateWisePNames.push(nameAndDate);
+					$scope.dateWisePValue[nameAndDate]=[pdList[2]];
+				}
+			 });
+			
+			 
+			$scope.dateWisePNames.forEach(function(dateWName) {
+				
+				/*sorting fetched values*/
+				$scope.finalStoredData=[];
+				$scope.finalStoredDataList={};
+				
+				var preStoredData=$scope.dateWisePValue[dateWName].toString().split(',');
+				
+				preStoredData.forEach(function(preStroeD){
+					$scope.finalStoredDataList[preStroeD.split('-')[1]]=preStroeD.split('-')[0];
+				})
+				
+				for(var i=1;$scope.finalStoredDataList[i]!=undefined;i++){
+					$scope.finalStoredData.push(parseFloat($scope.finalStoredDataList[i]));
+				}
+				
 			 var randomColor = '#' + ((1 << 24) * Math.random() | 0).toString(16);
-			 $scope.spiderApplicationSeries.push({name: productApplication, data: $scope.metricData[productApplication], color: randomColor});
-			 $scope.lineApplicationSeries.push({name: productApplication, data: $scope.metricData[productApplication], color: randomColor});
+			 $scope.spiderApplicationSeries.push({name: dateWName, data: $scope.finalStoredData, color: randomColor});
+			 $scope.lineApplicationSeries.push({name: dateWName, data: $scope.finalStoredData, color: randomColor});
+			});
+			 
 			 });
 			 
 		 } else {
-			 
 			 var applicationToPop = $.grep($scope.spiderApplicationSeries, function(e) {
 				 return e.name == application.name;
 			 });
@@ -134,8 +221,8 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 			 
 				 console.log('inside'+ application.value);
 				 $scope.section2= true;
-				 $scope.buildSpiderChart($scope.spiderChartModel, 'spiderChart2');
-				 $scope.buildLineChart($scope.lineChartModel, 'lineChart2');
+				 $scope.buildSpiderChart($scope.spiderChartModel, 'spiderChart2', 'Project Tracking');
+				 $scope.buildLineChart($scope.lineChartModel, 'lineChart2', 'Project Tracking');
 			 }
 			 else{
 				 $scope.section2= false;
@@ -143,11 +230,11 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 		 }
 		 else if (application.connectorId=='531be20171154d0000b07504') {
 			 if(application.selected){
-				 
+
 				 console.log('inside'+ application.value);
 				 $scope.section3= true;
-				 $scope.buildSpiderChart($scope.spiderChartModel, 'spiderChart3');
-				 $scope.buildLineChart($scope.lineChartModel, 'lineChart3');
+				 $scope.buildSpiderChart($scope.spiderChartModel, 'spiderChart3', 'Defect Metrics');
+				 $scope.buildLineChart($scope.lineChartModel, 'lineChart3', 'Defect Metrics');
 			 }
 			 else{
 				 $scope.section3= false;
@@ -158,8 +245,8 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 				
 				console.log('inside'+ application.value);
 				$scope.section1= true;
-				$scope.buildSpiderChart($scope.spiderChartModel, 'spiderChart');
-				$scope.buildLineChart($scope.lineChartModel, 'lineChart');
+				$scope.buildSpiderChart($scope.spiderChartModel, 'spiderChart', 'Code Quality');
+				$scope.buildLineChart($scope.lineChartModel, 'lineChart', 'Code Quality');
 			}
 			else{
 				$scope.section1= false;
@@ -168,7 +255,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     	
     };
 
-    $scope.buildLineChart = function(lineChartModel, lineChartId) {
+    $scope.buildLineChart = function(lineChartModel, lineChartId, selectedCategoryName) {
         new Highcharts.Chart({
             chart: {
                 renderTo: lineChartId,
@@ -176,14 +263,14 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
                 height: 400
             },
             title: {
-                text: 'Quality Metrics',
+                text: selectedCategoryName,
                 x: -20 //center
             },
             subtitle: {
                 x: -20
             },
             xAxis: {
-                categories: lineChartModel.categories
+                categories: lineChartModel.categoryArray
             },
             yAxis: {
                 title: {
@@ -210,8 +297,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
         });
     };
 
-    $scope.buildSpiderChart = function(spiderChartModel, spriderChartId) {
-
+    $scope.buildSpiderChart = function(spiderChartModel, spriderChartId, selectedCategoryName) {
         new Highcharts.Chart({
             chart: {
                 renderTo: spriderChartId,
@@ -221,13 +307,13 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
             },
 
             title: {
-                text: 'Quality Metrics',
+                text: selectedCategoryName,
                 x: -50,
                 y: 50
             },
 
             xAxis: {
-                categories: spiderChartModel.categories,
+                categories: spiderChartModel.categoryArray,
                 tickmarkPlacement: 'on',
                 lineWidth: 0
             },

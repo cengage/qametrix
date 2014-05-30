@@ -9,9 +9,12 @@ angular.module('sapience.system').controller('HeaderController', ['$scope', func
             'title': 'Dashboard',
             'state': 'DASHBOARD'
         },{
+            'title': 'MyProfile',
+            'state': 'MYPROFILE'
+        }/*,{
             'title': 'Products',
             'state': 'PRODUCT-LIST'
-        }];
+        }*/];
 
         $scope.isCollapsed = true;
     }
