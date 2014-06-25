@@ -10,13 +10,23 @@
 						<tr data-ng-repeat="platform in platforms | orderBy : 'name'">
 							    <td> <span class="text-primary"></span>
 							    <a><div data-ng-click="fetchProducts(platform);isCollapsed2= !isCollapsed2" class="glyphicon glyphicon-chevron-right" data-toggle="class"> <b>{{platform.name}}</b></div></a>
-								      <div id="isCollapsed2" collapse="!isCollapsed2" data-ng-repeat="product in filteredProducts | orderBy : 'name'" class="checkbox"> 
+								      <div id="isCollapsed2" collapse="!isCollapsed2" data-ng-repeat="product in filteredProducts | orderBy : 'name'"> 
 								      	 <ul>
-								      	 <label class="checkbox-inline">
 								      	 
-								      	 <input type="checkbox" data-ng-click="productSelected(product)"> {{product.name}}
+								      	 <a><div data-ng-click="isCollapsed3= !isCollapsed3" class="glyphicon glyphicon-chevron-right" data-toggle="class"><b>  {{product.name}}</b></div></a>
+								      	 <div id="isCollapsed3" collapse="!isCollapsed3">
 								      	 
-								      	 </label>
+								      	 <div class="checkbox">
+								      	 	<label class="checkbox-inline"><input type="checkbox" data-ng-click="productSelected(product,actualDataModel)" ng-model="actualDataModel"> Actual Data</label>
+								      	 </div>
+								      	 <div class="checkbox">
+								      	 	<label class="checkbox-inline"><input type="checkbox" data-ng-click="targetProductSelected(product,targetDataModel)" ng-model="targetDataModel"> Target Data</label>
+								      	 </div>
+								      	 	
+								      	 </div>
+								      	 
+								      	 <!-- <input type="text" data-ng-click="productSelected(product)">  -->
+								      	 
 										 </ul>
 									</div>
 								</td>

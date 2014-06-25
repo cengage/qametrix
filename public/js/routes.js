@@ -26,11 +26,11 @@ angular.module('sapience').config(['$stateProvider', '$urlRouterProvider',
           url: '/home',
           templateUrl: 'modules/home/views/home.html'
       }).state('MYPROFILE',{
-    	  url: '/myProfile',
-    	  templateUrl: 'modules/myProfile/views/myProfile.html'
+          url: '/myProfile',
+          templateUrl: 'modules/myProfile/views/myProfile.html'
       }).state('index',{
-    	  url: '/index',
-    	  templateUrl: 'views/index.html'
+          url: '/index',
+          templateUrl: 'views/index.html'
       }).state('LOGOUT', {
           url: '/logout',
           templateUrl: 'views/login.html'

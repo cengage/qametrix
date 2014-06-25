@@ -2,9 +2,15 @@
 
 angular.module('sapience.charts').controller('dashboardController', ['$rootScope', '$scope', '$http', '$filter', function($rootScope, $scope, $http, $filter) {
     $http.get('sapience/metrics').success(function(data) {
-    	$scope.mainMetrics=[];
-    	$scope.mainMetrics=data;
-    	console.log('Main metrics data is : '+$scope.mainMetrics);
+    	$scope.actualMetrics=[];
+    	$scope.actualMetrics=data;
+    	console.log('Main metrics data is : '+$scope.actualMetrics);
+    });
+    
+    $http.get('sapience/targetMetrics').success(function(data) {
+    	$scope.targetMetrics=[];
+    	$scope.targetMetrics=data;
+    	console.log('Main metrics data is : '+$scope.targetMetrics);
     });
     
     $scope.section1=false;
@@ -16,16 +22,20 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     
  // List of Product Selected
     $scope.applicationList=[];
+
+    // for Target Data Product List
+    $scope.targetDataApplicationList=[];
     
     $scope.spiderChartModel = {};
     $scope.lineChartModel = {};
     $scope.spiderChartModel.expectedSeries = {name: 'Expected', data: []};
     $scope.lineChartModel.expectedSeries = {name: 'Expected', data: []};
  
-    $rootScope.$on('productSelection', function(event, application) {
+    $rootScope.$on('productSelection', function(event, application, fetchFor) {
     	
-    	if($scope.applicationList==''){
-
+    	console.log('extra param to be fetch for is : '+fetchFor);
+    	
+    	if($scope.applicationList=='' && $scope.targetDataApplicationList==''){
     	    
     	    $scope.cateogories= [{
     			
@@ -49,11 +59,23 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 
     	if(application.selected){
     		
-    	$scope.applicationList.push(application.name);
+    		console.log('inside application selected');
+    		if(fetchFor=='forActualData'){
+    			$scope.applicationList.push(application.name);
+    		}else{
+    			$scope.targetDataApplicationList.push(application.name);
+    		}
     	
     	}else{
     		
-    		$scope.applicationList.splice($scope.applicationList.indexOf(application.name), 1);
+    		console.log('inside application not selected');
+    		
+    		if(fetchFor=='forActualData'){
+    			$scope.applicationList.splice($scope.applicationList.indexOf(application.name), 1);
+    		}
+    		else{
+    			$scope.targetDataApplicationList.splice($scope.targetDataApplicationList.indexOf(application.name), 1);
+    		}
     	}
     	
     	console.log('Selected Products are : '+$scope.applicationList);
@@ -62,6 +84,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     		
     		$scope.cateogories.forEach(function(category){
     			if(category.selected){
+    				console.log('fetch for is : '+fetchFor);
     				 // direct fetch graph by product (FGBP) , when category is alreay selected then check the product
     				$scope.applicationSelected(category,'directFGBP');
     			}
@@ -82,13 +105,14 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 		 $scope.metricData = {};
 		 // List of dated
 		 $scope.dateWiseMetricData={};
+		 $scope.targetDataDateWiseMetricData={};
 		 
 		 $scope.spiderChartModel.categories = [];
 		 $scope.lineChartModel.categories = [];
 		 var repeat=0;
 		 var nonRepeative=0;
 		 
-		 $scope.mainMetrics.forEach(function(metric) {
+		 $scope.actualMetrics.forEach(function(metric) {
 			 var selectedConnectors=application.connectorId.split(',');
 			 selectedConnectors.forEach(function(selectedConnector) {
 
@@ -107,7 +131,6 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 					 });
 					 if(check==false){
 						 nonRepeative=nonRepeative+1;
-						 console.log('inside non repeativ '+nonRepeative);
 						 $scope.spiderChartModel.categories.push(metric.category.name+'-'+metric.category.position);
 						 $scope.lineChartModel.categories.push(metric.category.name+'-'+metric.category.position);
 					 }
@@ -115,11 +138,12 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 				      var ProductWithDate=metric.product.name +'_'+$filter('date')(metric.created, "dd/MM/yyyy");
 				     
 					  if(metric.product.name in $scope.dateWiseMetricData){
-							console.log('inside repeative product');
+			
 							$scope.dateWiseMetricData[metric.product.name]=$scope.dateWiseMetricData[metric.product.name].concat([ProductWithDate +'_'+ metric.value+'-'+metric.category.position]);
 							
 					  }else{
-							console.log('inside separate product :'+ ProductWithDate);
+			
+						  console.log('storing another product value and position in dateWiseMetricData');
 							$scope.dateWiseMetricData[metric.product.name]=[ProductWithDate +'_'+ metric.value+'-'+metric.category.position];
 							
 					  }
@@ -129,6 +153,32 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 
 		 });
 		 
+		 // start target data metrics
+		 $scope.targetMetrics.forEach(function(metric) {
+			 var selectedConnectors=application.connectorId.split(',');
+			 selectedConnectors.forEach(function(selectedConnector) {
+
+				 if(metric.category.connector==selectedConnector){
+ 		
+				      var ProductWithDate='Target-'+metric.product.name +'_'+$filter('date')(metric.created, "dd/MM/yyyy");
+				     
+					  if(metric.product.name in $scope.targetDataDateWiseMetricData){
+			
+							$scope.targetDataDateWiseMetricData[metric.product.name]=$scope.targetDataDateWiseMetricData[metric.product.name].concat([ProductWithDate +'_'+ metric.value+'-'+metric.category.position]);
+							
+					  }else{
+			
+						  console.log('storing another product value and position in dateWiseMetricData');
+							$scope.targetDataDateWiseMetricData[metric.product.name]=[ProductWithDate +'_'+ metric.value+'-'+metric.category.position];
+							
+					  }
+				 }
+ 		
+			 });
+
+		 });
+		 
+		 // end of target data metrics
 		 if(fetchBy=='directFGBC'){
 			 application.selected = !application.selected;
 		 }
@@ -139,30 +189,24 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 			$scope.spiderChartModel.categoryArray=[];
 			$scope.lineChartModel.categoryArray=[];
 			$scope.categoryAList={};
-			
-			console.log('Initial category list is : '+$scope.spiderChartModel.categories);
 				
 			$scope.spiderChartModel.categories.forEach(function(spCat){
-				console.log('cat pos is : '+spCat.split('-')[1]);
-				console.log('cat name is : '+spCat.split('-')[0]);
+				
 				$scope.categoryAList[spCat.split('-')[1]]=spCat.split('-')[0];
 			});
 			
-			console.log('filtered value at pos is : '+$scope.categoryAList[4]);
 			 
 			for(var j=1;$scope.categoryAList[j]!=undefined;j++){
 				$scope.spiderChartModel.categoryArray.push($scope.categoryAList[j]);
 				$scope.lineChartModel.categoryArray.push($scope.categoryAList[j]);
 			}
 			
-			console.log('final sorted category name is : '+$scope.categoryArray);
-
 			// end of sorting category
 			
-			 $scope.applicationList.forEach(function(productApplication){
+			$scope.applicationList.forEach(function(productApplication){
 			 
 			var DWProductsList=$scope.dateWiseMetricData[productApplication];
-
+			
 			var dateWiseProductWithValues=DWProductsList.toString().split(',');
 			
 			$scope.dateWisePValue={};
@@ -171,7 +215,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 			dateWiseProductWithValues.forEach(function(dateWiseProduct) {
 				var pdList=dateWiseProduct.split('_');
 				var nameAndDate=(pdList[0]+'_'+pdList[1]).toString();
-				console.log('pdList value is :' +pdList[2]);
+				
 				if(nameAndDate in $scope.dateWisePValue){
 					$scope.dateWisePValue[nameAndDate]=$scope.dateWisePValue[nameAndDate].concat([pdList[2]]);
 				}
@@ -204,6 +248,54 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 			});
 			 
 			 });
+			
+			// for target data
+			$scope.targetDataApplicationList.forEach(function(productApplication){
+				 
+				var DWProductsList=$scope.targetDataDateWiseMetricData[productApplication];
+				
+				var dateWiseProductWithValues=DWProductsList.toString().split(',');
+				
+				$scope.dateWisePValue={};
+				$scope.dateWisePNames=[];
+				
+				dateWiseProductWithValues.forEach(function(dateWiseProduct) {
+					var pdList=dateWiseProduct.split('_');
+					var nameAndDate=(pdList[0]+'_'+pdList[1]).toString();
+					
+					if(nameAndDate in $scope.dateWisePValue){
+						$scope.dateWisePValue[nameAndDate]=$scope.dateWisePValue[nameAndDate].concat([pdList[2]]);
+					}
+					else{
+						$scope.dateWisePNames.push(nameAndDate);
+						$scope.dateWisePValue[nameAndDate]=[pdList[2]];
+					}
+				 });
+				
+				 
+				$scope.dateWisePNames.forEach(function(dateWName) {
+					
+					/*sorting fetched values*/
+					$scope.finalStoredData=[];
+					$scope.finalStoredDataList={};
+					
+					var preStoredData=$scope.dateWisePValue[dateWName].toString().split(',');
+					
+					preStoredData.forEach(function(preStroeD){
+						$scope.finalStoredDataList[preStroeD.split('-')[1]]=preStroeD.split('-')[0];
+					})
+					
+					for(var i=1;$scope.finalStoredDataList[i]!=undefined;i++){
+						$scope.finalStoredData.push(parseFloat($scope.finalStoredDataList[i]));
+					}
+					
+				 var randomColor = '#' + ((1 << 24) * Math.random() | 0).toString(16);
+				 $scope.spiderApplicationSeries.push({name: dateWName, data: $scope.finalStoredData, color: randomColor});
+				 $scope.lineApplicationSeries.push({name: dateWName, data: $scope.finalStoredData, color: randomColor});
+				});
+				 
+				 });
+			
 			 
 		 } else {
 			 var applicationToPop = $.grep($scope.spiderApplicationSeries, function(e) {
@@ -219,7 +311,6 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 		 if(application.connectorId=='533a3dfef48d45e41873a7a9'){
 			 if(application.selected){
 			 
-				 console.log('inside'+ application.value);
 				 $scope.section2= true;
 				 $scope.buildSpiderChart($scope.spiderChartModel, 'spiderChart2', 'Project Tracking');
 				 $scope.buildLineChart($scope.lineChartModel, 'lineChart2', 'Project Tracking');
@@ -231,7 +322,6 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 		 else if (application.connectorId=='531be20171154d0000b07504') {
 			 if(application.selected){
 
-				 console.log('inside'+ application.value);
 				 $scope.section3= true;
 				 $scope.buildSpiderChart($scope.spiderChartModel, 'spiderChart3', 'Defect Metrics');
 				 $scope.buildLineChart($scope.lineChartModel, 'lineChart3', 'Defect Metrics');
@@ -243,7 +333,6 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 		else{
 			if(application.selected){
 				
-				console.log('inside'+ application.value);
 				$scope.section1= true;
 				$scope.buildSpiderChart($scope.spiderChartModel, 'spiderChart', 'Code Quality');
 				$scope.buildLineChart($scope.lineChartModel, 'lineChart', 'Code Quality');

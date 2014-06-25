@@ -9,6 +9,8 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
         });
     });
     
+    $scope.actualDataModel=false;
+    $scope.targetDataModel=false;
     
     $http.get('sapience/platforms').success(function(data) {
         $scope.platforms = [];
@@ -29,10 +31,24 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	});
     };
     
-    $scope.productSelected = function(application) {
+    // function for Actual Data
+    $scope.productSelected = function(application, actualDataModel) {
 	    
-        $rootScope.$broadcast('productSelection', application);
+    	console.log('actual data model value is : '+actualDataModel);
+        $rootScope.$broadcast('productSelection', application,'forActualData');
     };
+    
+    // function for target Data
+    $scope.targetProductSelected=function(application, targetDataModel){
+    	
+    	console.log('target data model value is : '+targetDataModel);
+    	if(targetDataModel==false){
+    		application.selected=false;
+    	}
+    	
+    	console.log('is application data selected : '+application.selected);
+    	$rootScope.$broadcast('productSelection', application,'forTargetData');
+    }
     
     $scope.practices=[{
         'id': '1',
