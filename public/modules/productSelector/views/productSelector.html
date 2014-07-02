@@ -16,16 +16,27 @@
 								      	 <a><div data-ng-click="isCollapsed3= !isCollapsed3" class="glyphicon glyphicon-chevron-right" data-toggle="class"><b>  {{product.name}}</b></div></a>
 								      	 <div id="isCollapsed3" collapse="!isCollapsed3">
 								      	 
-								      	 <div class="checkbox">
-								      	 	<label class="checkbox-inline"><input type="checkbox" data-ng-click="productSelected(product,actualDataModel)" ng-model="actualDataModel"> Actual Data</label>
-								      	 </div>
-								      	 <div class="checkbox">
-								      	 	<label class="checkbox-inline"><input type="checkbox" data-ng-click="targetProductSelected(product,targetDataModel)" ng-model="targetDataModel"> Target Data</label>
-								      	 </div>
-								      	 	
+								      	 <div class="row">
+											  <div class="col-lg-6">
+											    <div class="checkbox">
+											      <span>
+											        <label class="checkbox-inline"><input type="checkbox" data-ng-click="productSelected(product,actualDataModel)" ng-model="actualDataModel"> Actual</label>
+											      </span>
+											    </div>
+											  </div>
+											  <div class="col-lg-6">
+											    <div class="checkbox">
+											      <span>
+											        <label class="checkbox-inline"><input type="checkbox" data-ng-click="targetProductSelected(product,targetDataModel)" ng-model="targetDataModel"> Target</label>
+											      </span>
+											     
+											    </div>
+											  </div>
+										</div>
+								      	 
 								      	 </div>
 								      	 
-								      	 <!-- <input type="text" data-ng-click="productSelected(product)">  -->
+								      
 								      	 
 										 </ul>
 									</div>
