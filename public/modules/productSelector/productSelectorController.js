@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sapience.charts').controller('ProductSelectorController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
-    $http.get('sapience/products').success(function(data) {
+    $http.get('/crud/products').success(function(data) {
     	$scope.products = [];
         data.forEach(function(product, index) {
             var product = {'id': index, 'selected':false, 'name': product.name,'platform': product.platform};
@@ -12,7 +12,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     $scope.actualDataModel=false;
     $scope.targetDataModel=false;
     
-    $http.get('sapience/platforms').success(function(data) {
+    $http.get('/crud/platforms').success(function(data) {
         $scope.platforms = [];
         data.forEach(function(platform, index) {
         	console.log('Initial platform id is : '+platform._id);

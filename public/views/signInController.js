@@ -10,7 +10,7 @@ angular.module('sapience.system').controller('signInController', ['$scope','$htt
 			$scope.loginAlert=false;
 			$scope.indexId=false;
 			$scope.login = function(credentials) {
-				$http.get('sapience/users/'+credentials.email+'/'+credentials.password).success(function(data) {
+				$http.get('/crud/users/'+credentials.email+'/'+credentials.password).success(function(data) {
 					
 					console.log('checking indexId is : '+$scope.sect);
 					

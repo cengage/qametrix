@@ -5,11 +5,8 @@
  */
 var express = require('express'),
     mongoStore = require('connect-mongo')(express),
-    consolidate = require('consolidate'),
     flash = require('connect-flash'),
-    helpers = require('view-helpers'),
-    config = require('./config'),
-    swig = require('swig');
+    config = require('./config');
 
 module.exports = function(app, db) {
     app.set('showStackError', true);
@@ -30,14 +27,10 @@ module.exports = function(app, db) {
         level: 9
     }));
 
-    // assign the template engine to .html files
-    app.engine('html', consolidate[config.templateEngine]);
-
-    // set .html as the default extension
-    app.set('view engine', 'html');
-
-    // Set views path, template engine and default layout
-    app.set('views', config.root + '/public/views');
+    // Only use logger for development environment
+    if (process.env.NODE_ENV === 'development') {
+        app.use(express.logger('dev'));
+    }
 
     // Enable jsonp
     app.enable('jsonp callback');
@@ -60,30 +53,14 @@ module.exports = function(app, db) {
             })
         }));
 
-        // Dynamic helpers
-        app.use(helpers(config.app.name));
-
         // Connect flash for flash messages
         app.use(flash());
 
-        // Setting the fav icon and static folder
-        app.use(express.favicon());
-        app.use(express.static(config.root + '/public'));
-
-        // Only use logger for development environment
-        if (process.env.NODE_ENV === 'local') {
-            app.use(express.logger('dev'));
-            // Swig will cache templates for you, but you can disable
-            // that and use Express's caching instead, if you like:
-            app.set('view cache', false);
-            // To disable Swig's cache, do the following:
-            swig.setDefaults({
-                cache: false
-            });
-        }
-
         // Routes should be at the last
         app.use(app.router);
+
+        // Setting the fav icon and static folder
+        app.use(express.favicon());
 
         // Assume "not found" in the error message is a 404. this is somewhat
         // silly, but valid, you can do whatever you like, set properties,
@@ -121,6 +98,5 @@ module.exports = function(app, db) {
         process.on('uncaughtException', function(err) {
             console.error('UNCAUGHT EXCEPTION\n' + err.stack || err.message);
         });
-
     });
 };

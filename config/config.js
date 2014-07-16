@@ -17,5 +17,11 @@ var userConfigFileName = pathExtra.homedir() + '/sapience-' + process.env.NODE_E
         userConfig
     );
 
-delete config.db;
+config.db = 'mongodb://{username}:{password}@{host}:{port}/{database}'
+    .replace('{username}:', _.isEmpty(config.db.username) ? '' : config.db.username + ':')
+    .replace('{password}@', _.isEmpty(config.db.password) ? '' : config.db.password + '@')
+    .replace('{host}', config.db.host)
+    .replace('{port}', config.db.port)
+    .replace('{database}', config.db.database);
+
 module.exports = config;

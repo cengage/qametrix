@@ -1,88 +1,89 @@
 <div data-ng-controller="myProfileController">
-    
-     <div class="row">
-     	<div class="col-sm-4 col-md-4">
-     	</div>
-     	
-        <div class="col-sm-2 col-md-2">
-            <img src="http://bardsleyhomes.co.uk/wp-content/themes/Realtr/images/dummy/user.jpg"
-            alt="User Profile Pic" class="img-rounded img-responsive" />
-            <br>
-        <button class="btn btn-facebook"><i class="fa fa-facebook"></i>  Connect with Facebook</button><br>
-        <button class="btn btn-twitter"><i class="fa fa-twitter"></i>  Connect with Twitter </button><br>
-        <button class="btn btn-linkedin"><i class="fa fa-linkedin"></i>  Connect with LinkedIn</button><br>
-        <button class="btn btn-google-plus"><i class="fa fa-google-plus"></i>  Connect with Google+</button><br>    
-             
+
+    <div class="row">
+        <div class="col-sm-4 col-md-4">
         </div>
-        
+
+        <div class="col-sm-2 col-md-2">
+            <img src="http://bardsleyhomes.co.uk/wp-content/themes/Realtr/images/dummy/user.jpg" alt="User Profile Pic" class="img-rounded img-responsive" />
+            <br>
+            <button class="btn btn-facebook"><i class="fa fa-facebook"></i> Connect with Facebook</button>
+            <br>
+            <button class="btn btn-twitter"><i class="fa fa-twitter"></i> Connect with Twitter</button>
+            <br>
+            <button class="btn btn-linkedin"><i class="fa fa-linkedin"></i> Connect with LinkedIn</button>
+            <br>
+            <button class="btn btn-google-plus"><i class="fa fa-google-plus"></i> Connect with Google+</button>
+            <br>
+
+        </div>
+
         <div class="col-sm-4 col-md-4" id="viewProfileId">
             <blockquote>
-                <p>{{userSession.firstName}} {{userSession.lastName}} &nbsp;&nbsp; 
-                <a href="#" onClick="$('#viewProfileId').hide(); $('#editProfileId').show()">
-                                            <i class="glyphicon glyphicon-edit"></i>
-                                        </a>
+                <p>{{userSession.firstName}} {{userSession.lastName}} &nbsp;&nbsp;
+                    <a href="#" onClick="$('#viewProfileId').hide(); $('#editProfileId').show()">
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </a>
                 </p> <small><cite title="Source Title">New Delhi, India  
                 <i class="glyphicon glyphicon-map-marker"></i></cite></small>
             </blockquote>
             <p> <i class="glyphicon glyphicon-envelope"></i> {{userSession.email}}
-                <br/> <i class="glyphicon glyphicon-globe"></i> <a href="http://www.qainfotech.com">www.qainfotech.com</a>
+                <br/> <i class="glyphicon glyphicon-globe"></i>  <a href="http://www.qainfotech.com">www.qainfotech.com</a>
                 <br /> <i class="glyphicon glyphicon-user"></i> {{userSession.role}}
-                </p>
+            </p>
         </div>
-       
+
         <div class="col-sm-4 col-md-5" id="editProfileId" style="display:none">
-         
-          <div class="panel panel-info">
-           	<div class="panel-body" >
-           		<form id="updateUserProfileformId" name="updateUserProfileform" class="form-horizontal" role="form" ng-submit="updateUserProfile(userSession)">
-           			 <div class="form-group input-group-sm">
-                                    <label for="email" class="col-md-4 control-label">Email</label>
-                                    <div class="col-md-7">
-                                        <input type="email" class="form-control" name="email" required="" placeholder="Email Address" ng-model="userSession.email">
-                                    </div>
-                                </div>
-                                    
-                                <div class="form-group input-group-sm">
-                                    <label for="firstname" class="col-md-4 control-label">First Name</label>
-                                    <div class="col-md-7">
-                                        <input type="text" class="form-control" name="firstname" ng-model="userSession.firstName" placeholder="First Name" required="">
-                                    </div>
-                                </div>
-                                <div class="form-group input-group-sm">
-                                    <label for="lastname" class="col-md-4 control-label">Last Name</label>
-                                    <div class="col-md-7">
-                                        <input type="text" class="form-control" name="lastname" ng-model="userSession.lastName" placeholder="Last Name">
-                                    </div>
-                                </div>
-                               <div class="form-group input-group-sm">
-                                    <label for="password" class="col-md-4 control-label">New Password</label>
-                                    <div class="col-md-7">
-                                        <input type="password" class="form-control" name="password" placeholder="Password" ng-model="userSession.password" id="inputPassword" required="">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group input-group-sm">
-                                    <label for="password" class="col-md-4 control-label">Re-enter Password</label>
-                                    <div class="col-md-7">
-                                        <input type="password" class="form-control" name="password" placeholder="Re-enter Password" id="inputPassword" required="">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <!-- Button -->                                        
-                                    <div class="col-md-offset-4 col-md-9">
-                                    <button type="submit" class="btn btn-success"
-         onClick="$('#editProfileId').hide(); $('#viewProfileId').show()">&nbsp
-         Update Profile</button>
-                                        <!-- <button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp Sign Up</button> -->
-                                        <span style="margin-left:8px;"></span>  
-                                    </div>
-                                </div>
-           		
-           		</form>
-           	</div>
-          </div>
-        
+
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <form id="updateUserProfileformId" name="updateUserProfileform" class="form-horizontal" role="form" ng-submit="updateUserProfile(userSession)">
+                        <div class="form-group input-group-sm">
+                            <label for="email" class="col-md-4 control-label">Email</label>
+                            <div class="col-md-7">
+                                <input type="email" class="form-control" name="email" required="" placeholder="Email Address" ng-model="userSession.email">
+                            </div>
+                        </div>
+
+                        <div class="form-group input-group-sm">
+                            <label for="firstname" class="col-md-4 control-label">First Name</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" name="firstname" ng-model="userSession.firstName" placeholder="First Name" required="">
+                            </div>
+                        </div>
+                        <div class="form-group input-group-sm">
+                            <label for="lastname" class="col-md-4 control-label">Last Name</label>
+                            <div class="col-md-7">
+                                <input type="text" class="form-control" name="lastname" ng-model="userSession.lastName" placeholder="Last Name">
+                            </div>
+                        </div>
+                        <div class="form-group input-group-sm">
+                            <label for="password" class="col-md-4 control-label">New Password</label>
+                            <div class="col-md-7">
+                                <input type="password" class="form-control" name="password" placeholder="Password" ng-model="userSession.password" id="inputPassword" required="">
+                            </div>
+                        </div>
+
+                        <div class="form-group input-group-sm">
+                            <label for="password" class="col-md-4 control-label">Re-enter Password</label>
+                            <div class="col-md-7">
+                                <input type="password" class="form-control" name="password" placeholder="Re-enter Password" id="inputPassword" required="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <!-- Button -->
+                            <div class="col-md-offset-4 col-md-9">
+                                <button type="submit" class="btn btn-success" onClick="$('#editProfileId').hide(); $('#viewProfileId').show()">&nbsp Update Profile</button>
+                                <!-- <button id="btn-signup" type="button" class="btn btn-info"><i class="icon-hand-right"></i> &nbsp Sign Up</button> -->
+                                <span style="margin-left:8px;"></span> 
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
         </div>
-       </div>
+    </div>
 </div>

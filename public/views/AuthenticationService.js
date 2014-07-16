@@ -5,7 +5,7 @@ angular.module('sapience.system').factory('AuthService', function ($http) {
 		  
 		  signup: function (userInfo) {
 		      return $http
-		        .post('sapience/users', userInfo)
+		        .post('/crud/users', userInfo)
 		        .then(function () {
 		        	/*$scope.signupalert=true;*/
 		        	console.log('inside method after saving data');

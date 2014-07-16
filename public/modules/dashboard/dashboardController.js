@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('sapience.charts').controller('dashboardController', ['$rootScope', '$scope', '$http', '$filter', function($rootScope, $scope, $http, $filter) {
-    $http.get('sapience/metrics').success(function(data) {
+    $http.get('/crud/metrics').success(function(data) {
     	$scope.actualMetrics=[];
     	$scope.actualMetrics=data;
     	console.log('Main metrics data is : '+$scope.actualMetrics);
     });
     
-    $http.get('sapience/targetMetrics').success(function(data) {
+    $http.get('/crud/targetMetrics').success(function(data) {
     	$scope.targetMetrics=[];
     	$scope.targetMetrics=data;
     	console.log('Main metrics data is : '+$scope.targetMetrics);

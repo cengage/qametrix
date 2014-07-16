@@ -6,6 +6,7 @@
  * Module dependencies.
  */
 var express = require('express'),
+    logger = require('mean-logger'),
     expressLoad = require('express-load');
 
 /**
@@ -18,15 +19,21 @@ var express = require('express'),
 process.env.NODE_ENV = process.env.NODE_ENV || 'local';
 
 // Initializing system variables 
-var config = require('./config/config');
+var config = require('./config/config'),
+    mongoose = require('mongoose');
 
-var app = express();
+// Bootstrap db connection
+var db = mongoose.connect(config.db),
+    app = express();
 
 // Express settings
-require('./config/express')(app);
+require('./config/express')(app, db);
 
 // Bootstrap app
-expressLoad('server/routes', {
+expressLoad('server/models', {
+    extlist: /^(?!.*_spec\.).*\.(js$)/,
+    cwd: __dirname
+}).then('server/routes', {
     extlist: /(.*)\.(js$)/,
     cwd: __dirname
 }).into(app);
@@ -37,6 +44,9 @@ app.listen(port);
 
 console.log('Environment is "' + process.env.NODE_ENV + '"');
 console.log('Express app started on port ' + port + ' using config\n', config);
+
+// Initializing logger
+logger.init(app, {}, mongoose);
 
 // Expose app
 module.exports = app;

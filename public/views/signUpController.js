@@ -15,7 +15,7 @@ angular.module('sapience.system').controller('signUpController', ['$scope', 'AUT
 	
 	 $scope.signup = function (userInfo) {
 		 var checkEmail=false;
-		 $http.get('sapience/users/'+userInfo.email).success(function(data) {
+		 $http.get('/crud/users/'+userInfo.email).success(function(data) {
 					
 					$scope.usersForMailCheck=[];
 					$scope.usersForMailCheck=data;
