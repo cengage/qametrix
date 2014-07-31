@@ -42,10 +42,20 @@ Now clone the App Repo
 
 At the command line of the app directory
 	
-	cd {to-your-dir-here} /sapience/sapience-ui
+	cd {to-your-dir-here} /sapience
 	npm install
 	grunt server 
 
+###  Troublshooting and Issues
+
+If you have troubles with your installation / configuration, perform the following commands:
+
+    sudo npm cache clean 
+    rm -rf node_modules/grunt
+    rm -rf .bower*
+    npm install grunt
+    grunt default
+   	
 ### You should be up and running now!
 
 <http://localhost:3010/>

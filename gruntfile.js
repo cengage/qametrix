@@ -94,7 +94,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        clean: ['./test/*.js']
+        clean: ['./test/*.js', './lib/']
     });
 
     //Load NPM tasks
