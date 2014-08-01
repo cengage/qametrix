@@ -4,108 +4,124 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    _ = require('lodash'),
-    UserModel = mongoose.model('User');
+    Q = require('q'),
+    User = mongoose.model('User');
 
 /**
- * Find user by id
- */
-exports.user = function(req, res, next, userId) {
-	UserModel.load(userId, function(err, user) {
-        if (err) {
-            return next(err);
-        } else if (!user) {
-            return next(new Error('Failed to load user ' + userId));
-        }
-        req.user = user;
-        next();
+ * Auth callback
+ *//*
+exports.authCallback = function(req, res) {
+    res.redirect('/');
+};
+
+*//**
+ * Show login form
+ *//*
+exports.signin = function(req, res) {
+    res.render('users/signin', {
+        title: 'Signin',
+        message: req.flash('error')
     });
 };
 
+*//**
+ * Show sign up form
+ *//*
+exports.signup = function(req, res) {
+    res.render('users/signup', {
+        title: 'Sign up',
+        user: new User()
+    });
+};
+
+*//**
+ * Logout
+ *//*
+exports.signout = function(req, res) {
+    req.logout();
+    res.redirect('/');
+};
+
+*//**
+ * Session
+ *//*
+exports.session = function(req, res) {
+    res.redirect('/');
+};*/
+
 /**
- * Create an user
+ * Create user
  */
-exports.create = function(req, res) {
-    var user = new UserModel(req.body);
+exports.create = function(userObj) {
+    var user = new User(userObj),
+        message = null,
+        createReq = Q.defer();
+
+    user.provider = 'local';
 
     user.save(function(err) {
         if (err) {
-            res.send(500, err);
+            switch (err.code) {
+                case 11000:
+                case 11001:
+                    message = 'Email already exists';
+                    break;
+                default:
+                    message = 'Please fill all the required fields';
+            }
+            createReq.reject(message);
         } else {
-            res.jsonp(user);
+            createReq.resolve(user);
         }
     });
-};
 
-/**
- * Load user by id
- */
-exports.show = function(req, res) {
-    res.jsonp(req.user);
-};
+    return createReq.promise;
 
-/*Find user by email id*/
-
-exports.findUserByEmailId = function(req, res) {
-	
-	 UserModel.find({email:req.params.email}, '-__v').exec(function(err, users) {
-	        if (err) {
-	            res.render('error', {
-	                status: 500
-	            });
-	        } else {
-	            res.jsonp(users);
-	        }
-	    });
-};
-
-/**
- * Find user by email and password
- */
-exports.findUserByEmailAndPwd = function(req, res) {
-    
-    UserModel.find({email:req.params.email,password:req.params.password}, '-__v').exec(function(err, users) {
+    /*user.save(function(err) {
         if (err) {
-            res.render('error', {
-                status: 500
+            switch (err.code) {
+                case 11000:
+                case 11001:
+                    message = 'Email already exists';
+                    break;
+                default:
+                    message = 'Please fill all the required fields';
+            }
+
+            return res.render('users/signup', {
+                message: message,
+                user: user
             });
-        } else {
-            res.jsonp(users);
         }
-    });
+        req.logIn(user, function(err) {
+            if (err) return next(err);
+            return res.redirect('/');
+        });
+    });*/
 };
 
 /**
- * Update an user
- */
+ * Send User
+ *//*
 
-exports.update = function(req, res) {
-	 
-	 var id = req.body._id;
-	 
-	 UserModel.findOne({_id: id}, function(err, user){
-	        _.extend(user, req.body);
-	        user.save(function(err) {
-	            if (err) {
-	                res.send(500, err);
-	            } else {
-	                res.jsonp(user);
-	            }
-	        });
-	    });
-	};
-
-/**
- * List of Users
- */
-exports.all = function(req, res) {
-	UserModel.find({}, '-__v').exec(function(err, users) {
-        if (err) {
-            res.render('error', {
-                status: 500
-            });
-        } else {
-            res.jsonp(users);
-        }
-    });
+exports.me = function(req, res) {
+    res.jsonp(req.user || null);
 };
+
+*/
+/**
+ * Find user by id
+ *//*
+
+exports.user = function(req, res, next, id) {
+    User
+        .findOne({
+            _id: id
+        })
+        .exec(function(err, user) {
+            if (err) return next(err);
+            if (!user) return next(new Error('Failed to load User ' + id));
+            req.profile = user;
+            next();
+        });
+};*/

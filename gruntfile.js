@@ -32,7 +32,7 @@ module.exports = function(grunt) {
                 script: 'server.js',
                 options: {
                     ext: 'js,json',
-                    ignore: ['public/**'],
+                    ignore: ['public/**', 'lib/**', 'test/**'],
                     nodeArgs: ['--debug=8888']
                 }
             },

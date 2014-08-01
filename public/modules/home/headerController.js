@@ -1,22 +1,22 @@
 'use strict';
 
-angular.module('sapience.system').controller('HeaderController', ['$scope', function($scope) {
-	
-	console.log('inside Header Controller');
-        $scope.menu = [{
-            'title': 'Home',
-            'state': 'HOME'
-        },{
+angular.module('sapience.system').controller('HeaderController', ['$scope', 'UserService', function($scope, UserService) {
+
+    $scope.menu = [
+        {
             'title': 'Dashboard',
             'state': 'DASHBOARD'
         }/*,{
-            'title': 'MyProfile',
-            'state': 'MYPROFILE'
-        },{
-            'title': 'Products',
-            'state': 'PRODUCT-LIST'
-        }*/];
+         'title': 'MyProfile',
+         'state': 'MYPROFILE'
+         },{
+         'title': 'Products',
+         'state': 'PRODUCT-LIST'
+         }*/
+    ];
 
-        $scope.isCollapsed = true;
-    }
+    $scope.isCollapsed = true;
+    $scope.isLoggedIn = UserService.isUserAuthenticated;
+    $scope.getUser = UserService.getUser;
+}
 ]);

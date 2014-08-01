@@ -23,20 +23,22 @@ var config = require('./config/config'),
     mongoose = require('mongoose');
 
 // Bootstrap db connection
-var db = mongoose.connect(config.db),
-    app = express();
+var app = express();
 
-// Express settings
-require('./config/express')(app, db);
+app.db = mongoose.connect(config.db);
+app.passport = require('passport');
 
-// Bootstrap app
+// Bootstrap Models into app
 expressLoad('server/models', {
     extlist: /^(?!.*_spec\.).*\.(js$)/,
     cwd: __dirname
-}).then('server/routes', {
-    extlist: /(.*)\.(js$)/,
-    cwd: __dirname
 }).into(app);
+
+// Bootstrap passport config
+require('./config/passport')(app.passport);
+
+// Express settings
+require('./config/express')(app);
 
 // Start the app by listening on <port>
 var port = process.env.PORT || config.port;

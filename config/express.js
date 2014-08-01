@@ -4,14 +4,21 @@
  * Module dependencies.
  */
 var express = require('express'),
-    mongoStore = require('connect-mongo')(express),
-    consolidate = require('consolidate'),
-    flash = require('connect-flash'),
+    session = require('express-session'),
+    expressValidator = require('express-validator'),
+    compression = require('compression'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    methodOverride = require('method-override'),
+    favicon = require('serve-favicon'),
+    logger = require('morgan'),
+    mongoStore = require('connect-mongo')(session),
     helpers = require('view-helpers'),
     config = require('./config'),
-    swig = require('swig');
+    swig = require('swig'),
+    expressLoad = require('express-load');
 
-module.exports = function(app, db) {
+module.exports = function(app) {
     app.set('showStackError', true);
 
     // Prettify HTML
@@ -21,7 +28,7 @@ module.exports = function(app, db) {
 
     // Should be placed before express.static
     // To ensure that all assets and data are compressed (utilize bandwidth)
-    app.use(express.compress({
+    app.use(compression({
         filter: function(req, res) {
             return (/json|text|javascript|css/).test(res.getHeader('Content-Type'));
         },
@@ -30,8 +37,8 @@ module.exports = function(app, db) {
         level: 9
     }));
 
-    // assign the template engine to .html files
-    app.engine('html', consolidate[config.templateEngine]);
+    // This is where all the magic happens!
+    app.engine('html', swig.renderFile);
 
     // set .html as the default extension
     app.set('view engine', 'html');
@@ -42,85 +49,97 @@ module.exports = function(app, db) {
     // Enable jsonp
     app.enable('jsonp callback');
 
-    app.configure(function() {
-        // The cookieParser should be above session
-        app.use(express.cookieParser());
+    // The cookieParser should be above session
+    app.use(cookieParser());
 
-        // Request body parsing middleware should be above methodOverride
-        app.use(express.urlencoded());
-        app.use(express.json());
-        app.use(express.methodOverride());
+    // Request body parsing middleware should be above methodOverride
+    app.use(expressValidator());
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({
+        extended: false
+    }));
+    app.use(methodOverride());
 
-        // Express/Mongo session storage
-        app.use(express.session({
-            secret: config.sessionSecret,
-            store: new mongoStore({
-                db: db.connection.db,
-                collection: config.sessionCollection
-            })
-        }));
+    // Express/Mongo session storage
+    app.use(session({
+        name: 'sapience.session.id',
+        secret: config.sessionSecret,
+        resave: true,
+        saveUninitialized: true,
+        store: new mongoStore({
+            db: app.db.connection.db,
+            collection: config.sessionCollection
+        })
+    }));
 
-        // Dynamic helpers
-        app.use(helpers(config.app.name));
+    // Dynamic helpers
+    app.use(helpers(config.app.name));
 
-        // Connect flash for flash messages
-        app.use(flash());
+    // Use passport session
+    app.use(app.passport.initialize());
+    app.use(app.passport.session());
 
-        // Setting the fav icon and static folder
-        app.use(express.favicon());
-        app.use(express.static(config.root + '/public'));
+    // Bootstrap Routes into app
+    expressLoad('../server/routes', {
+        extlist: /(.*)\.(js$)/,
+        cwd: __dirname
+    }).into(app);
 
-        // Only use logger for development environment
-        if (process.env.NODE_ENV === 'local') {
-            app.use(express.logger('dev'));
-            // Swig will cache templates for you, but you can disable
-            // that and use Express's caching instead, if you like:
-            app.set('view cache', false);
-            // To disable Swig's cache, do the following:
-            swig.setDefaults({
-                cache: false
-            });
-        }
+    // Setting the fav icon and static folder
+    app.use(favicon(__dirname + '/../public/img/favicon.ico'));
 
-        // Routes should be at the last
-        app.use(app.router);
+    var viewsDir = config.root + '/public';
+    app.use(express.static(viewsDir));
 
-        // Assume "not found" in the error message is a 404. this is somewhat
-        // silly, but valid, you can do whatever you like, set properties,
-        // use instanceof etc.
-        app.use(function(err, req, res, next) {
-            // Treat as 404
-            if (~err.message.indexOf('not found')) return next();
-
-            // Log it
-            console.error(err.stack);
-
-            // Error page
-            res.status(500).send('500', {
-                error: err.stack
-            });
+    // Only use logger for development environment
+    if (process.env.NODE_ENV === 'local') {
+        console.log('You are developing locally, let me disable cache for....');
+        app.use(logger('dev'));
+        // Swig will cache templates for you, but you can disable
+        // that and use Express's caching instead, if you like:
+        app.set('view cache', false);
+        // To disable Swig's cache, do the following:
+        swig.setDefaults({
+            cache: false
         });
+    }
 
-        // Assume 404 since no middleware responded
-        app.use(function(req, res) {
-            res.status(404).send('404', {
-                url: req.originalUrl,
-                error: 'Not found'
-            });
+    // Assume "not found" in the error message is a 404. this is somewhat
+    // silly, but valid, you can do whatever you like, set properties,
+    // use instanceof etc.
+    app.use(function(err, req, res, next) {
+        // Treat as 404
+        if (~err.message.indexOf('not found')) return next();
+
+        // Log it
+        console.error(err.stack);
+
+        // Error page
+        res.status(500).send('500', {
+            error: err.stack
         });
-
-        function errorHandler(err, req, res) {
-            res.status(500);
-            res.render('error', {
-                error: err
-            });
-        }
-        app.use(errorHandler);
-
-        // Do not stop server on any unhandled error
-        process.on('uncaughtException', function(err) {
-            console.error('UNCAUGHT EXCEPTION\n' + err.stack || err.message);
-        });
-
     });
+
+    // Assume 404 since no middleware responded
+    app.use(function(req, res) {
+        res.status(404).send('404', {
+            url: req.originalUrl,
+            error: 'Not found'
+        });
+    });
+
+    function errorHandler(err, req, res) {
+        res.status(500);
+        res.render('error', {
+            error: err
+        });
+    }
+
+    app.use(errorHandler);
+
+    // Do not stop server on any unhandled error
+    process.on('uncaughtException', function(err) {
+        console.error('UNCAUGHT EXCEPTION\n' + err.stack || err.message);
+    });
+
 };
