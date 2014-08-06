@@ -8,7 +8,7 @@ angular.module('sapience.system.user').controller('RegisterController', ['$scope
                 $state.go('home');
                 NotificationService.info('Registration Successful...');
             }).catch(function(errors) {
-                if (angular.isArray(errors)) {
+                if (angular.isArray(errors) || angular.isObject(errors)) {
                     _.forEach(errors, function(err) {
                         err.timeout = false;
                         NotificationService.error(err);

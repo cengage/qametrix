@@ -1,5 +1,6 @@
 <div data-ng-controller="LoginController">
     <h3 class="text-center">Welcome to Sapience</h3>
+
     <form name="loginForm" data-ng-submit="login()" class="form-horizontal" novalidate>
         <fieldset>
             <div class="form-group" data-ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }">
@@ -28,6 +29,14 @@
                     </button>
                     <span>or</span>
                     <a data-ui-sref="register">Register</a>
+                </div>
+            </div>
+            </br>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Sign in with</label>
+
+                <div class="col-sm-5">
+                    <ng-include src="'/modules/user/views/auth.html'"></ng-include>
                 </div>
             </div>
         </fieldset>

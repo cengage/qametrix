@@ -8,6 +8,7 @@ var express = require('express'),
     expressValidator = require('express-validator'),
     compression = require('compression'),
     cookieParser = require('cookie-parser'),
+    flash = require('connect-flash'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     favicon = require('serve-favicon'),
@@ -75,6 +76,9 @@ module.exports = function(app) {
     // Dynamic helpers
     app.use(helpers(config.app.name));
 
+    // Connect flash for flash messages
+    app.use(flash());
+
     // Use passport session
     app.use(app.passport.initialize());
     app.use(app.passport.session());
@@ -109,14 +113,16 @@ module.exports = function(app) {
     // use instanceof etc.
     app.use(function(err, req, res, next) {
         // Treat as 404
-        if (~err.message.indexOf('not found')) return next();
+        if (err.message && err.message.indexOf('not found')) {
+            return next();
+        }
 
         // Log it
-        console.error(err.stack);
+        console.error(err.stack || err);
 
         // Error page
         res.status(500).send('500', {
-            error: err.stack
+            error: err.stack || err
         });
     });
 

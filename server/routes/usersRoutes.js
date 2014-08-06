@@ -4,14 +4,14 @@
 var users = require('../controllers/user');
 
 module.exports = function(app) {
-    /*var passport = app.passport;*/
+    var passport = app.passport;
 
     // Register the user with local provider
     app.post('/auth/register', function(req, res, next) {
         req.assert('firstName', 'You must enter a first name').notEmpty();
         req.assert('lastName', 'You must enter a last name').notEmpty();
         req.assert('email', 'You must enter a valid email address').isEmail();
-        req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
+        req.assert('password', 'You must enter password').notEmpty();
         req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
         var errors = req.validationErrors();
@@ -49,16 +49,16 @@ module.exports = function(app) {
 
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
         failureRedirect: '/signin'
-    }), users.authCallback);
+    }), users.redirectTo);*/
 
-    // Setting the github oauth routes
+    /*// Setting the github oauth routes
     app.get('/auth/github', passport.authenticate('github', {
         failureRedirect: '/signin'
     }), users.signin);
 
     app.get('/auth/github/callback', passport.authenticate('github', {
         failureRedirect: '/signin'
-    }), users.authCallback);
+    }), users.redirectTo);
 
     // Setting the twitter oauth routes
     app.get('/auth/twitter', passport.authenticate('twitter', {
@@ -67,7 +67,7 @@ module.exports = function(app) {
 
     app.get('/auth/twitter/callback', passport.authenticate('twitter', {
         failureRedirect: '/signin'
-    }), users.authCallback);
+    }), users.redirectTo);
 
     // Setting the google oauth routes
     app.get('/auth/google', passport.authenticate('google', {
@@ -80,16 +80,37 @@ module.exports = function(app) {
 
     app.get('/auth/google/callback', passport.authenticate('google', {
         failureRedirect: '/signin'
-    }), users.authCallback);
+    }), users.redirectTo);*/
 
     // Setting the linkedin oauth routes
-    app.get('/auth/linkedin', passport.authenticate('linkedin', {
-        failureRedirect: '/signin',
+    app.get('/auth/linkedin',passport.authenticate('linkedin', {
+        /*failureRedirect: '/#!/register',*/
         scope: [ 'r_emailaddress' ]
-    }), users.signin);
+    }));
 
-    app.get('/auth/linkedin/callback', passport.authenticate('linkedin', {
-        failureRedirect: '/siginin'
-    }), users.authCallback);*/
+    app.get('/auth/linkedin/callback', function(req, res, next) {
+        app.passport.authenticate('linkedin', function(err, user, info) {
+            if (err) {
+                req.flash('error', err);
+                return res.redirect('/#!/register');
+            }
+            if (!user) {
+                return res.send(401, info);
+            }
+            req.login(user, function(err) {
+                if (err) {
+                    return next(err);
+                }
+                return res.redirect('/');
+            });
+        })(req, res, next);
+    });
+
+    /*app.get('/auth/linkedin/callback', app.passport.authenticate('linkedin', {
+        failureRedirect: '/#!/register'
+    }), function(req,res,next){
+        console.log('/auth/linkedin/callback');
+        next();
+    });*/
 
 };

@@ -5,6 +5,6 @@ angular.module('sapience.system.notification', ['ui.router']).constant('ColorCod
     error: 'danger'
 }).run(function($rootScope, NotificationService) {
 
-    $rootScope.$on('$stateChangeStart', NotificationService.reset);
+//    $rootScope.$on('$stateChangeStart', NotificationService.reset);
 
 });

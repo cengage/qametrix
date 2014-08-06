@@ -23,7 +23,7 @@ module.exports = function(passport) {
         User.findOne({
             _id: id
         }, function(err, user) {
-            done(err, user.sanitize());
+            done(err, user && user.sanitize());
         });
     });
 
@@ -185,20 +185,21 @@ module.exports = function(passport) {
         function(accessToken, refreshToken, profile, done) {
             User.findOne({
                 'linkedin.id': profile.id
-            }, function(err, user) {
-                if (!user) {
-                    user = new User({
-                        name: profile.displayName,
-                        email: profile.emails[0].value,
-                        username: profile.emails[0].value,
-                        provider: 'linkedin'
-                    });
-                    user.save(function(err) {
-                        if (err) console.log(err);
-                        return done(err, user);
+            }, function(err, foundUser) {
+                if (!foundUser) {
+                    User.save({
+                        firstName: profile._json.firstName,
+                        lastName: profile._json.lastName,
+                        email: profile._json.emailAddress,
+                        provider: 'linkedin',
+                        linkedin: profile._json
+                    }).then(function(newUser) {
+                        return done(null, newUser.sanitize());
+                    }).catch(function(err) {
+                        return done(err);
                     });
                 } else {
-                    return done(err, user);
+                    return done(err, foundUser && foundUser.sanitize());
                 }
             });
         }

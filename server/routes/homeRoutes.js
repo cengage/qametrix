@@ -11,7 +11,8 @@ module.exports = function(app) {
     app.get('/', function(req, res) {
         res.render('index', {
             app: config.app,
-            user: req.user
+            user: req.user,
+            renderErrors : req.flash('error')
         });
     });
 

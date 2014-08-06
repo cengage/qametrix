@@ -52,53 +52,7 @@ exports.session = function(req, res) {
 /**
  * Create user
  */
-exports.create = function(userObj) {
-    var user = new User(userObj),
-        message = null,
-        createReq = Q.defer();
-
-    user.provider = 'local';
-
-    user.save(function(err) {
-        if (err) {
-            switch (err.code) {
-                case 11000:
-                case 11001:
-                    message = 'Email already exists';
-                    break;
-                default:
-                    message = 'Please fill all the required fields';
-            }
-            createReq.reject(message);
-        } else {
-            createReq.resolve(user);
-        }
-    });
-
-    return createReq.promise;
-
-    /*user.save(function(err) {
-        if (err) {
-            switch (err.code) {
-                case 11000:
-                case 11001:
-                    message = 'Email already exists';
-                    break;
-                default:
-                    message = 'Please fill all the required fields';
-            }
-
-            return res.render('users/signup', {
-                message: message,
-                user: user
-            });
-        }
-        req.logIn(user, function(err) {
-            if (err) return next(err);
-            return res.redirect('/');
-        });
-    });*/
-};
+exports.create = User.save;
 
 /**
  * Send User
