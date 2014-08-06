@@ -50,11 +50,12 @@ At the command line of the app directory
 
 If you have troubles with your installation / configuration, perform the following commands:
 
-    sudo npm cache clean 
-    rm -rf node_modules/grunt
-    rm -rf .bower*
-    npm install grunt
-    grunt default
+    cd {to-your-dir-here} /sapience
+    sudo npm cache clean
+    bower cache clean
+    rm -rf .bower-cache .bower-registry .bower-tmp public/lib
+    npm install -f
+    grunt
    	
 ### You should be up and running now!
 
