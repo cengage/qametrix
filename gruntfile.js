@@ -71,7 +71,7 @@ module.exports = function(grunt) {
         },
         jsbeautifier: {
             'default': {
-                src: ['<%= jshint.all.src %>', 'bower.json', '<%= watch.html.files %>'],
+                src: ['<%= jshint.all.src %>', 'bower.json', '<%= watch.html.files %>', '!public/views/**/*.html'],
                 options: {
                     js: {
                         preserveNewlines: true,

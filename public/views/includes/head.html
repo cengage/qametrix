@@ -20,16 +20,8 @@
     <![endif]-->
     {% block content %}
     <script type="text/javascript">
-        window.user = {
-            {
-                JSON.stringify(user)
-            }
-        };
-        window.renderErrors = {
-            {
-                JSON.stringify(renderErrors)
-            }
-        };
+        window.user = {{JSON.stringify(user)}};
+        window.renderErrors = {{JSON.stringify(renderErrors)}};
     </script>
     {% endblock %}
 </head>
