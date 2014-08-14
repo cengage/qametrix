@@ -2,40 +2,58 @@
     <h3 class="text-center">Welcome to Sapience</h3>
 
     <form name="loginForm" data-ng-submit="login()" class="form-horizontal" novalidate>
-        <fieldset>
-            <div class="form-group" data-ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }">
-                <label class="col-sm-4 control-label" for="email">Email</label>
+        <fieldset class="col-sm-10 col-sm-offset-1 login">
 
-                <div class="col-sm-5">
-                    <input id="email" class="form-control" type="text" name="email" placeholder="Email" data-ng-model="user.email" required/>
+            <div class="col-xs-12 col-sm-5 col-sm-offset-1">
+                <div class="form-group" data-ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }">
+                    <label class="" for="email">Email</label>
 
-                    <p data-ng-show="loginForm.email.$invalid && !loginForm.email.$pristine" class="help-block">Valid email is required</p>
+                    <div class="">
+                        <input id="email" class="form-control" type="text" name="email" placeholder="Email" data-ng-model="user.email" required/>
+
+                        <p data-ng-show="loginForm.email.$invalid && !loginForm.email.$pristine" class="help-block">Valid email is required</p>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group" data-ng-class="{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }">
-                <label class="col-sm-4 control-label" for="password">Password</label>
+                <div class="form-group" data-ng-class="{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }">
+                    <label class="" for="password">Password</label>
 
-                <div class="col-sm-5">
-                    <input id="password" class="form-control" type="password" name="password" placeholder="Password" data-ng-model="user.password" required/>
+                    <div class="">
+                        <input id="password" class="form-control" type="password" name="password" placeholder="Password" data-ng-model="user.password" required/>
 
-                    <p data-ng-show="loginForm.password.$invalid && !loginForm.password.$pristine" class="help-block">Password cannot be blank</p>
+                        <p data-ng-show="loginForm.password.$invalid && !loginForm.password.$pristine" class="help-block">Password cannot be blank</p>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-4 col-sm-6">
-                    <button type="submit" class="btn btn-primary" data-ng-disabled="loginForm.$invalid">
-                        <span class="glyphicon glyphicon-log-in"></span>
-                        Login
-                    </button>
-                    <span>or</span>
-                    <a data-ui-sref="register">Register</a>
-                </div>
-            </div>
-            </br>
-            <div class="form-group">
-                <label class="col-sm-4 control-label">Sign in with</label>
 
-                <div class="col-sm-5">
+                <div class="form-group">
+                    <div class="">
+                        <p class="">
+                            <input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping">
+                            <label for="loginkeeping" class="loginkeeping">Remember me</label>
+                            <a href="" class="find-password pull-right">Forgot password?</a>
+                        </p>
+                        <div class="pull-right">
+                            <a class="btn btn-default" data-ui-sref="register">Register</a>
+                            <span> or </span>
+                            <button type="submit" class="btn btn-primary btn-login" data-ng-disabled="loginForm.$invalid">
+                                <span class="glyphicon glyphicon-log-in"></span>
+                                Login
+                            </button>
+                        </div>
+                        
+
+                        
+                    </div>
+                </div>
+            </div>            
+            
+            <div class="col-xs-0 col-sm-1">
+                <div class="separator"></div>
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-5">
+                <!-- <label class="">Sign in with</label> -->
+
+                <div class="login-social">
                     <ng-include src="'/modules/user/views/auth.html'"></ng-include>
                 </div>
             </div>

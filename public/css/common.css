@@ -1,0 +1,19 @@
+a.btn-social{
+	width: 70%;
+}
+@media (max-width: 1100px) {
+	a.btn-social{
+		width: 90%;
+	}
+}
+@media (max-width: 768px) {
+	a.btn-social{
+		width: 40%;
+		display: inline-block;
+	}
+}
+@media (max-width: 500px) {
+	a.btn-social{
+		width: 90%;
+	}
+}

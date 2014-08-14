@@ -6,6 +6,9 @@ angular.module('sapience.system').controller('HeaderController', ['$scope', 'Use
         {
             'title': 'Dashboard',
             'state': 'DASHBOARD'
+        },{
+            'title': 'Admin',
+            'state': 'ADMIN'
         }/*,{
          'title': 'MyProfile',
          'state': 'MYPROFILE'
