@@ -23,7 +23,10 @@ angular.module('sapience').config(['$stateProvider', '$urlRouterProvider',
             }
         }).state('home', {
             url: '/',
-            templateUrl: '/modules/home/views/home.html'
+            templateUrl: '/modules/home/views/home.html',
+            data: {
+                isSecured: false
+            }
         });
     }
 ]);

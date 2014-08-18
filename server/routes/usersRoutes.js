@@ -89,6 +89,18 @@ module.exports = function(app) {
     }));
 
     app.get('/auth/linkedin/callback', function(req, res, next) {
+        var errorMsg;
+        if(req.query.oauth_problem){
+            switch (req.query.oauth_problem){
+                case 'user_refused':
+                    errorMsg = 'You declined to login with Linkedin...';
+                    break;
+                default:
+                    errorMsg = req.query.oauth_problem;
+            }
+            req.flash('error', errorMsg);
+            return res.redirect('/#!/register');
+        }
         app.passport.authenticate('linkedin', function(err, user, info) {
             if (err) {
                 req.flash('error', err);

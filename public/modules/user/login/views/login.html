@@ -1,62 +1,48 @@
-<div data-ng-controller="LoginController">
-    <h3 class="text-center">Welcome to Sapience</h3>
-
+<div data-ng-controller="LoginController" class="col-sm-offset-3 col-sm-6">
+    <div class="text-center">
+        <h4>Please Log In with</h4>
+        <ng-include src="'/modules/user/views/auth.html'"></ng-include>
+    </div>
+    <div class="separator">
+        <hr class="separator" />
+        <span class="separator">or</span>
+    </div>
     <form name="loginForm" data-ng-submit="login()" class="form-horizontal" novalidate>
-        <fieldset class="col-sm-10 col-sm-offset-1 login">
+        <div class="form-group" data-ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }">
+            <label class="col-sm-12" for="email">Email</label>
 
-            <div class="col-xs-12 col-sm-5 col-sm-offset-1">
-                <div class="form-group" data-ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }">
-                    <label class="" for="email">Email</label>
+            <div class="col-sm-12">
+                <input id="email" class="form-control" type="text" name="email" placeholder="Email" data-ng-model="user.email" required/>
 
-                    <div class="">
-                        <input id="email" class="form-control" type="text" name="email" placeholder="Email" data-ng-model="user.email" required/>
-
-                        <p data-ng-show="loginForm.email.$invalid && !loginForm.email.$pristine" class="help-block">Valid email is required</p>
-                    </div>
-                </div>
-                <div class="form-group" data-ng-class="{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }">
-                    <label class="" for="password">Password</label>
-
-                    <div class="">
-                        <input id="password" class="form-control" type="password" name="password" placeholder="Password" data-ng-model="user.password" required/>
-
-                        <p data-ng-show="loginForm.password.$invalid && !loginForm.password.$pristine" class="help-block">Password cannot be blank</p>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="">
-                        <p class="">
-                            <input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping">
-                            <label for="loginkeeping" class="loginkeeping">Remember me</label>
-                            <a href="" class="find-password pull-right">Forgot password?</a>
-                        </p>
-                        <div class="pull-right">
-                            <a class="btn btn-default" data-ui-sref="register">Register</a>
-                            <span> or </span>
-                            <button type="submit" class="btn btn-primary btn-login" data-ng-disabled="loginForm.$invalid">
-                                <span class="glyphicon glyphicon-log-in"></span>
-                                Login
-                            </button>
-                        </div>
-                        
-
-                        
-                    </div>
-                </div>
-            </div>            
-            
-            <div class="col-xs-0 col-sm-1">
-                <div class="separator"></div>
+                <p data-ng-show="loginForm.email.$invalid && !loginForm.email.$pristine" class="help-block">Valid email is required</p>
             </div>
+        </div>
+        <div class="form-group" data-ng-class="{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }">
+            <label class="col-sm-12" for="password">Password</label>
 
-            <div class="form-group col-xs-12 col-sm-5">
-                <!-- <label class="">Sign in with</label> -->
+            <div class="col-sm-12">
+                <input id="password" class="form-control" type="password" name="password" placeholder="Password" data-ng-model="user.password" required/>
 
-                <div class="login-social">
-                    <ng-include src="'/modules/user/views/auth.html'"></ng-include>
-                </div>
+                <p data-ng-show="loginForm.password.$invalid && !loginForm.password.$pristine" class="help-block">Password cannot be blank</p>
             </div>
-        </fieldset>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <input type="checkbox" name="rememberMe" id="rememberMe" />
+                <label for="rememberMe" class="rememberMe">Remember me</label>
+                <a data-ui-sref="resetPassword" class="find-password pull-right">Forgot password?</a>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12">
+                <button type="submit" class="btn btn-primary" data-ng-disabled="loginForm.$invalid">
+                    <i class="fa fa-sign-in"></i>
+                    Login
+                </button>
+                <span>or</span>
+                <a class="btn btn-default" data-ui-sref="register">Register</a>
+            </div>
+        </div>
     </form>
 </div>
