@@ -23,6 +23,10 @@ hr.separator {
     margin-top: 0px !important;
     margin-bottom: 0px !important;
 }
+
+.navbar-nav .social-login {
+    padding-top: 8px;
+}
 /*
 a.btn-social{
 	width: 70%;

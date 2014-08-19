@@ -14,14 +14,24 @@
                 <a data-ui-sref="{{item.state}}">{{item.title}}</a>
             </li>
         </ul>
-        <ul class="navbar-nav nav pull-right">
-            <li data-ng-if="!isLoggedIn()">
+        <ul class="navbar-nav nav pull-right" data-ng-if="!isLoggedIn()">
+            <li>
+                <div class="social-login">
+                    <a class="btn btn-social btn-linkedin" href="/auth/linkedin">
+                        <i class="fa fa-linkedin"></i>
+                        Linkedin
+                    </a>
+                </div>
+            </li>
+            <li>
                 <a data-ui-sref="login">
                     <i class="fa fa-sign-in fa-lg"></i>
                     Login
                 </a>
             </li>
-            <li class="dropdown" data-ng-if="isLoggedIn()">
+        </ul>
+        <ul class="navbar-nav nav pull-right" data-ng-if="isLoggedIn()">
+            <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     {{getUser().email}} <b class="caret"></b>
                 </a>
