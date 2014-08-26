@@ -100,9 +100,9 @@ module.exports = function(passport) {
                 }
                 if (!user) {
                     user = new User({
-                        name: profile.displayName,
+                        firstName: profile.name.givenName,
+                        lastName: profile.name.familyName,
                         email: profile.emails[0].value,
-                        username: profile.username,
                         provider: 'facebook',
                         facebook: profile._json
                     });
