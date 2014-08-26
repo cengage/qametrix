@@ -41,15 +41,44 @@ module.exports = function(app) {
         failureFlash: true
     }), users.session);*/
 
-    /*// Setting the facebook oauth routes
+    // Setting the facebook oauth routes
     app.get('/auth/facebook', passport.authenticate('facebook', {
         scope: ['email', 'user_about_me'],
         failureRedirect: '/signin'
-    }), users.signin);
+    }));
 
-    app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-        failureRedirect: '/signin'
-    }), users.redirectTo);*/
+    app.get('/auth/facebook/callback', function(req, res, next){
+        var errorMsg;
+        if(req.query.oauth_problem){
+            switch (req.query.oauth_problem){
+                case 'user_refused':
+                    errorMsg = 'You declined to login with Facebook...';
+                    break;
+                default:
+                    errorMsg = req.query.oauth_problem;
+            }
+            req.flash('error', errorMsg);
+            return res.redirect('/#!/register');
+        }
+        passport.authenticate('facebook', function(err, user, info) {
+            console.log('Authenticated with passport...');
+            if (err) {
+                //alert(err);
+                console.log('There was an error', err);
+                req.flash('error', err);
+                return res.redirect('/#!/register');
+            }
+            if (!user) {
+                return res.send(401, info);
+            }
+            req.login(user, function(err) {
+                if (err) {
+                    return next(err);
+                }
+                return res.redirect('/');
+            });
+        })(req, res, next);
+    });
 
     /*// Setting the github oauth routes
     app.get('/auth/github', passport.authenticate('github', {
