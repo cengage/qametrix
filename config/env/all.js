@@ -23,8 +23,8 @@ module.exports = {
     },
     passport: {
         facebook: {
-            clientID: '379938472158336',
-            clientSecret: '84c3c651c0fda96bfade575d5601986a',
+            clientID: '699766656776373',
+            clientSecret: 'aa5dbfa35d54c7897c217acb2cc75135',
             callbackURL: 'http://localhost:3010/auth/facebook/callback'
         },
         twitter: {

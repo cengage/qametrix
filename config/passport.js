@@ -94,24 +94,21 @@ module.exports = function(passport) {
         function(accessToken, refreshToken, profile, done) {
             User.findOne({
                 'facebook.id': profile.id
-            }, function(err, user) {
-                if (err) {
-                    return done(err);
-                }
-                if (!user) {
-                    user = new User({
+            }, function(err, foundUser) {
+                if (!foundUser) {
+                    User.save({
                         firstName: profile.name.givenName,
                         lastName: profile.name.familyName,
                         email: profile.emails[0].value,
                         provider: 'facebook',
                         facebook: profile._json
-                    });
-                    user.save(function(err) {
-                        if (err) console.log(err);
-                        return done(err, user);
+                    }).then(function(newUser) {
+                        return done(null, newUser.sanitize());
+                    }).catch(function(err) {
+                        return done(err);
                     });
                 } else {
-                    return done(err, user);
+                    return done(err, foundUser && foundUser.sanitize());
                 }
             });
         }

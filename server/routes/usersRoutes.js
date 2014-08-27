@@ -43,28 +43,24 @@ module.exports = function(app) {
 
     // Setting the facebook oauth routes
     app.get('/auth/facebook', passport.authenticate('facebook', {
-        scope: ['email', 'user_about_me'],
-        failureRedirect: '/signin'
+        scope: ['email', 'public_profile']
     }));
 
     app.get('/auth/facebook/callback', function(req, res, next){
         var errorMsg;
-        if(req.query.oauth_problem){
-            switch (req.query.oauth_problem){
-                case 'user_refused':
+        if(req.query.error){
+            switch (req.query.error_reason){
+                case 'user_denied':
                     errorMsg = 'You declined to login with Facebook...';
                     break;
                 default:
-                    errorMsg = req.query.oauth_problem;
+                    errorMsg = req.query.error_description;
             }
             req.flash('error', errorMsg);
             return res.redirect('/#!/register');
         }
         passport.authenticate('facebook', function(err, user, info) {
-            console.log('Authenticated with passport...');
             if (err) {
-                //alert(err);
-                console.log('There was an error', err);
                 req.flash('error', err);
                 return res.redirect('/#!/register');
             }
@@ -130,7 +126,7 @@ module.exports = function(app) {
             req.flash('error', errorMsg);
             return res.redirect('/#!/register');
         }
-        app.passport.authenticate('linkedin', function(err, user, info) {
+        passport.authenticate('linkedin', function(err, user, info) {
             if (err) {
                 req.flash('error', err);
                 return res.redirect('/#!/register');

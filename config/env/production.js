@@ -3,5 +3,32 @@
 module.exports = {
     app: {
         title: 'Quality Metrics Prod'
+    },
+    passport: {
+        facebook: {
+            clientID: '699766656776373',
+            clientSecret: 'aa5dbfa35d54c7897c217acb2cc75135',
+            callbackURL: 'http://sapience.qualityagile.com/auth/facebook/callback'
+        },
+        twitter: {
+            clientID: 'CONSUMER_KEY',
+            clientSecret: 'CONSUMER_SECRET',
+            callbackURL: 'http://sapience.qualityagile.com/auth/twitter/callback'
+        },
+        github: {
+            clientID: 'APP_ID',
+            clientSecret: 'APP_SECRET',
+            callbackURL: 'http://sapience.qualityagile.com/auth/github/callback'
+        },
+        google: {
+            clientID: 'APP_ID',
+            clientSecret: 'APP_SECRET',
+            callbackURL: 'http://sapience.qualityagile.com/auth/google/callback'
+        },
+        linkedin: {
+            clientID: '75yarpoenxjeys',
+            clientSecret: 'VJBCUicSXeUEOdfT',
+            callbackURL: 'http://sapience.qualityagile.com/auth/linkedin/callback'
+        }
     }
 };
