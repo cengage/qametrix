@@ -21,7 +21,11 @@ angular.module('sapience').config(['$stateProvider', '$urlRouterProvider',
                     templateUrl: '/modules/productSelector/views/productSelector.html'
                 }
             }
-        }).state('home', {
+        }).state('EXPECTED-DATA', {
+            url: '/expectedData',
+            templateUrl: 'modules/expectedData/views/expectedData.html'
+        })
+        .state('home', {
             url: '/',
             templateUrl: '/modules/home/views/home.html',
             data: {

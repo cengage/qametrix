@@ -4,13 +4,11 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     $http.get('/crud/metrics').success(function(data) {
     	$scope.actualMetrics=[];
     	$scope.actualMetrics=data;
-    	console.log('Main metrics data is : '+$scope.actualMetrics);
     });
     
-    $http.get('/crud/targetMetrics').success(function(data) {
-    	$scope.targetMetrics=[];
-    	$scope.targetMetrics=data;
-    	console.log('Main metrics data is : '+$scope.targetMetrics);
+    $http.get('/crud/productCategoriesExpectedData').success(function(data) {
+    	$scope.expectedMetrics = [];
+    	$scope.expectedMetrics = data;
     });
     
     $scope.section1=false;
@@ -23,8 +21,8 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
  // List of Product Selected
     $scope.applicationList=[];
 
-    // for Target Data Product List
-    $scope.targetDataApplicationList=[];
+    // for Expected Data Product List
+    $scope.expectedDataApplicationList=[];
     
     $scope.spiderChartModel = {};
     $scope.lineChartModel = {};
@@ -32,10 +30,9 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     $scope.lineChartModel.expectedSeries = {name: 'Expected', data: []};
  
     $rootScope.$on('productSelection', function(event, application, fetchFor) {
+
     	
-    	console.log('extra param to be fetch for is : '+fetchFor);
-    	
-    	if($scope.applicationList=='' && $scope.targetDataApplicationList==''){
+    	if($scope.applicationList=='' && $scope.expectedDataApplicationList==''){
     	    
     	    $scope.cateogories= [{
     			
@@ -59,32 +56,28 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 
     	if(application.selected){
     		
-    		console.log('inside application selected');
+    		
     		if(fetchFor=='forActualData'){
     			$scope.applicationList.push(application.name);
     		}else{
-    			$scope.targetDataApplicationList.push(application.name);
+    			$scope.expectedDataApplicationList.push(application.name);
     		}
     	
     	}else{
-    		
-    		console.log('inside application not selected');
-    		
     		if(fetchFor=='forActualData'){
     			$scope.applicationList.splice($scope.applicationList.indexOf(application.name), 1);
     		}
     		else{
-    			$scope.targetDataApplicationList.splice($scope.targetDataApplicationList.indexOf(application.name), 1);
+    			$scope.expectedDataApplicationList.splice($scope.expectedDataApplicationList.indexOf(application.name), 1);
     		}
     	}
     	
-    	console.log('Selected Products are : '+$scope.applicationList);
     	
     	if($scope.cateogories!=''){
     		
     		$scope.cateogories.forEach(function(category){
     			if(category.selected){
-    				console.log('fetch for is : '+fetchFor);
+    				
     				 // direct fetch graph by product (FGBP) , when category is alreay selected then check the product
     				$scope.applicationSelected(category,'directFGBP');
     			}
@@ -97,15 +90,13 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     
     $scope.applicationSelected=function(application,fetchBy) {
     	
-    	console.log('selected Category is : '+application.value);
-    	
-   	 	$scope.spiderApplicationSeries = [];
+   	 	$scope.spiderApplicationSeries = [];//
 		$scope.lineApplicationSeries = [];
 		   
 		 $scope.metricData = {};
 		 // List of dated
 		 $scope.dateWiseMetricData={};
-		 $scope.targetDataDateWiseMetricData={};
+		 $scope.expectedDataDateWiseMetricData={};
 		 
 		 $scope.spiderChartModel.categories = [];
 		 $scope.lineChartModel.categories = [];
@@ -143,7 +134,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 							
 					  }else{
 			
-						  console.log('storing another product value and position in dateWiseMetricData');
+						
 							$scope.dateWiseMetricData[metric.product.name]=[ProductWithDate +'_'+ metric.value+'-'+metric.category.position];
 							
 					  }
@@ -153,23 +144,23 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 
 		 });
 		 
-		 // start target data metrics
-		 $scope.targetMetrics.forEach(function(metric) {
+		 // start Expected data metrics
+		 $scope.expectedMetrics.forEach(function(expectedMetric) {
 			 var selectedConnectors=application.connectorId.split(',');
 			 selectedConnectors.forEach(function(selectedConnector) {
 
-				 if(metric.category.connector==selectedConnector){
+				 if(expectedMetric.category.connector==selectedConnector){
  		
-				      var ProductWithDate='Target-'+metric.product.name +'_'+$filter('date')(metric.created, "dd/MM/yyyy");
+				      var ProductWithDate='Expected-'+expectedMetric.product.name +'_'+$filter('date')(expectedMetric.created, "dd/MM/yyyy");
 				     
-					  if(metric.product.name in $scope.targetDataDateWiseMetricData){
+					  if(expectedMetric.product.name in $scope.expectedDataDateWiseMetricData){
 			
-							$scope.targetDataDateWiseMetricData[metric.product.name]=$scope.targetDataDateWiseMetricData[metric.product.name].concat([ProductWithDate +'_'+ metric.value+'-'+metric.category.position]);
+							$scope.expectedDataDateWiseMetricData[expectedMetric.product.name]=$scope.expectedDataDateWiseMetricData[expectedMetric.product.name].concat([ProductWithDate +'_'+ expectedMetric.expectedValue+'-'+expectedMetric.category.position]);
 							
 					  }else{
 			
-						  console.log('storing another product value and position in dateWiseMetricData');
-							$scope.targetDataDateWiseMetricData[metric.product.name]=[ProductWithDate +'_'+ metric.value+'-'+metric.category.position];
+						
+							$scope.expectedDataDateWiseMetricData[expectedMetric.product.name]=[ProductWithDate +'_'+ expectedMetric.expectedValue+'-'+expectedMetric.category.position];
 							
 					  }
 				 }
@@ -178,7 +169,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 
 		 });
 		 
-		 // end of target data metrics
+		 // end of Expected data metrics
 		 if(fetchBy=='directFGBC'){
 			 application.selected = !application.selected;
 		 }
@@ -249,10 +240,10 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 			 
 			 });
 			
-			// for target data
-			$scope.targetDataApplicationList.forEach(function(productApplication){
+			// for Expected data
+			$scope.expectedDataApplicationList.forEach(function(productApplication){
 				 
-				var DWProductsList=$scope.targetDataDateWiseMetricData[productApplication];
+				var DWProductsList=$scope.expectedDataDateWiseMetricData[productApplication];
 				
 				var dateWiseProductWithValues=DWProductsList.toString().split(',');
 				
@@ -387,7 +378,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     };
 
     $scope.buildSpiderChart = function(spiderChartModel, spriderChartId, selectedCategoryName) {
-        new Highcharts.Chart({
+    	 new Highcharts.Chart({
             chart: {
                 renderTo: spriderChartId,
                 polar: true,
@@ -425,8 +416,106 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
                 layout: 'vertical'
             },
 
-            series: [spiderChartModel.expectedSeries].concat(spiderChartModel.applicationSeries)
+            /*if(selectedCategoryName=='Team Survey Responses'){
+            	series: [spiderChartModel.applicationSeries]
+            }
+            else{*/
+            	series: [spiderChartModel.expectedSeries].concat(spiderChartModel.applicationSeries)	
+            /*}*/
+            
         });
     };
+    
+    $scope.limeSurveyBuildSpiderChart = function(spiderChartModel, spriderChartId, selectedCategoryName) {
+    	 new Highcharts.Chart({
+            chart: {
+                renderTo: spriderChartId,
+                polar: true,
+                type: 'line',
+                height: 500
+            },
+
+            title: {
+                text: selectedCategoryName,
+                x: -50
+            },
+            pane: {
+                size: '80%'
+            },
+
+            xAxis: {
+                categories: spiderChartModel.categoryArray,
+                tickmarkPlacement: 'on',
+                lineWidth: 0
+            },
+
+            yAxis: {
+                gridLineInterpolation: 'polygon',
+                lineWidth: 0,
+                min: 0
+            },
+
+            tooltip: {
+                shared: true,
+                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+            },
+
+            legend: {
+                align: 'right',
+                verticalAlign: 'top',
+                y: 70,
+                layout: 'vertical'
+            },
+
+            /*if(selectedCategoryName=='Team Survey Responses'){
+            	series: [spiderChartModel.applicationSeries]
+            }
+            else{*/
+            	series: [spiderChartModel.applicationSeries]	
+            /*}*/
+            
+        });
+    };
+    
+    $rootScope.$on('limeSurveySelection', function(event, data, questionList) {
+    	
+    	$scope.limeSDataSeries=[];
+    	$scope.limeSDataSeries=data;
+    	//here category array represent question array 
+    	$scope.spiderChartModel.categoryArray=[];
+    	$scope.limeSurveyAnsArray=[];
+    	$scope.actualQuestionArray=[];
+    	
+    	questionList.forEach(function(limeSData){
+    		
+    		var question=limeSData.question;
+    		if(question.indexOf('"') >= 0){
+    			var exactQuestion=question.substring(question.indexOf('"')+1,question.lastIndexOf('"'));
+    			
+    			$scope.actualQuestionArray.push(exactQuestion);
+    		}
+    		
+    	});
+    	
+    	$scope.spiderChartModel.categoryArray=$scope.actualQuestionArray.reverse();
+    	
+    	
+    	$scope.limeSDataSeries.forEach(function(limeSData){
+    		
+    		$scope.spiderChartModel.categoryArray.push('Q-'+limeSData.keyName);
+    		$scope.limeSurveyAnsArray.push(limeSData.answer);
+		});
+
+    	$scope.spiderChartModel.applicationSeries={name: 'Expected', data: $scope.limeSurveyAnsArray};
+    	$scope.section1= true;
+    	$scope.limeSurveyBuildSpiderChart($scope.spiderChartModel, 'spiderChart', 'Team Survey Responses');
+		/*$scope.buildLineChart($scope.lineChartModel, 'lineChart', 'Code Quality');*/
+    	
+    	
+    	/*$scope.buildSpiderChart($scope.spiderChartModel, 'spiderChart', 'Code Quality');
+		$scope.buildLineChart($scope.lineChartModel, 'lineChart', 'Code Quality');*/
+    	
+    });
+    
     
 }]);

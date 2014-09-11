@@ -6,10 +6,10 @@ angular.module('sapience.system').controller('HeaderController', ['$scope', 'Use
         {
             'title': 'Dashboard',
             'state': 'DASHBOARD'
+        },{
+            'title': 'Expected Data',
+            'state': 'EXPECTED-DATA'
         }/*,{
-            'title': 'Admin',
-            'state': 'ADMIN'
-        }*//*,{
          'title': 'MyProfile',
          'state': 'MYPROFILE'
          },{

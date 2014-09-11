@@ -10,12 +10,11 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     });
     
     $scope.actualDataModel=false;
-    $scope.targetDataModel=false;
+    $scope.expectedDataModel=false;
     
     $http.get('/crud/platforms').success(function(data) {
         $scope.platforms = [];
         data.forEach(function(platform, index) {
-        	console.log('Initial platform id is : '+platform._id);
             var platform = {id: platform._id, name: platform.name};
             $scope.platforms.push(platform);
         });
@@ -31,37 +30,162 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	});
     };
     
+   
+    // function for showing responses
+    $scope.selectSurvey = function(surveyId) {
+    	$scope.selectedSurveyId= surveyId;
+    	console.log('sssurvey id'+surveyId);
+    	var headers1 = {
+    			'Access-Control-Allow-Origin' : 'http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol',
+    			'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT',
+    			'Access-Control-Allow-Headers': 'X-Requested-With',
+    			'Content-Type': 'application/json',
+    			'Accept': 'application/json'
+    		};
+
+    	var request1 = $http({
+    	method: "post",
+    	headers: headers1,
+    	url: "http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol",
+    	data: {
+    		method: "list_questions",
+    		id: 1,
+    	    params: {
+    	    	sSessionKey: $scope.sessionKeySurvey,
+    	    	iSurveyID : surveyId
+    	    }
+    	}
+    	});
+    	request1.success(
+    	        function( data, status, headers, config ) {
+    	        	$scope.limeSurveyQuestions=data.result;
+    	         });  
+    	
+    	
+ 	   var headers = {
+    			'Access-Control-Allow-Origin' : 'http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol',
+    			'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT',
+    			'Access-Control-Allow-Headers': 'X-Requested-With',
+    			'Content-Type': 'application/json',
+    			'Accept': 'application/json'
+    		};
+ 	   
+    	var request = $http({
+    	method: "post",
+    	headers: headers,
+    	url: "http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol",
+    	data: {
+    		method: "export_responses",
+    		id: 1,
+    	    params: {
+    	    	sSessionKey: $scope.sessionKeySurvey,
+    	    	iSurveyID: $scope.selectedSurveyId,
+    	    	sDocumentType: 'json',
+    	    	sLanguageCode: null,
+    	    	sCompletionStatus: 'complete',
+    	    	sHeadingType: 'code',
+    	    	sResponseType: 'short',
+    	    	iFromResponseID: null,
+    	    	iToResponseID: null,
+    	    	aFields: null
+    	    }
+    	}
+    	});
+    	request.success(
+    	        function( data1, status, headers, config ) {
+    	        	console.log('making call'+data1.result);
+    	        	
+	        	$http.get('/crud/products/survey/'+data1.result).success(function(data1) {
+    	       	$rootScope.$broadcast('limeSurveySelection', data1, $scope.limeSurveyQuestions);
+    	        });
+	        	
+    	       }
+    	        );
+ 	   
+    };
+
+ // function for selected Practice
+    $scope.practiceSelected = function(practiceSelectedId) {
+    	
+    	$scope.cfdump = "";
+    	if(practiceSelectedId== 1){
+    		
+    		var headers = {
+    				'Access-Control-Allow-Origin' : 'http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol',
+    				'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT',
+    				'Access-Control-Allow-Headers': 'X-Requested-With',
+    				'Content-Type': 'application/json',
+    				'Accept': 'application/json'
+    			};
+    		
+    	var request = $http({
+            method: "post",
+            headers: headers,
+            url: "http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol",
+            data: {
+            	method: "get_session_key",
+            	id: 1,
+                params: {
+                	username: "admin",
+                	password: "admin"
+                }
+            }
+        });
+
+        // Store the data-dump of the FORM scope.
+        request.success(
+            function( initialData, status) {
+            	$scope.sessionKeySurvey= initialData.result;
+            	var headers1 = {
+            			'Access-Control-Allow-Origin' : 'http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol',
+            			'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT',
+            			'Access-Control-Allow-Headers': 'X-Requested-With',
+            			'Content-Type': 'application/json',
+            			'Accept': 'application/json'
+            		};
+
+            	var request1 = $http({
+            	method: "post",
+            	headers: headers1,
+            	url: "http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol",
+            	data: {
+            		method: "list_surveys",
+            		id: 1,
+            	    params: {
+            	    	sSessionKey: initialData.result,
+            	    	sUser: "admin"
+            	    }
+            	}
+            	});
+            	request1.success(
+            	        function( data, status, headers, config ) {
+            	        	$scope.limeSurveyTitleResults=data.result;
+            	          });        	        
+            	});
+            }
+    };
+    
+    
     // function for Actual Data
     $scope.productSelected = function(application, actualDataModel) {
 	    
-    	console.log('actual data model value is : '+actualDataModel);
         $rootScope.$broadcast('productSelection', application,'forActualData');
     };
     
-    // function for target Data
-    $scope.targetProductSelected=function(application, targetDataModel){
+    // function for Expected Data
+    $scope.expectedProductSelected=function(application, expectedDataModel){
     	
-    	console.log('target data model value is : '+targetDataModel);
-    	if(targetDataModel==false){
+    	if(expectedDataModel==false){
     		application.selected=false;
     	}
     	
-    	console.log('is application data selected : '+application.selected);
-    	$rootScope.$broadcast('productSelection', application,'forTargetData');
+    	$rootScope.$broadcast('productSelection', application,'forExpectedData');
     }
+    
     
     $scope.practices=[{
         'id': '1',
-        'name': 'Take the work to the team'
-    },{
-        'id': '2',
-        'name': 'Team Practices'
-    },{
-        'id': '3',
-        'name': 'Appropriate Pairing'
-    },{
-        'id': '4',
-        'name': 'Exploratory Testing'
+        'name': 'Surveys'
     }];
     
 }]);

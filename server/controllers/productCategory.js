@@ -53,3 +53,45 @@ exports.all = function(req, res) {
         }
     });
 };
+exports.fetchProductCategoriesExpectedData = function(req, res) {
+	 ProductCategoryModel.find({}, '-__v').populate([{
+	        path: 'product',
+	        select: 'code name'
+	    }, {
+	        path: 'category',
+	        select: 'code name connector position'
+	    }]).exec(function(err, metrics) {
+	        if (err) {
+	            res.send(500, err);
+	        } else {
+	            res.jsonp(metrics);
+	        }
+	    });
+	};
+
+	exports.findDataBySelectedProductAndCategory = function(req, res){
+	 ProductCategoryModel.find({product:req.params.productId,category:req.params.categoryId}, '-__v').exec(function(err, productCategory) {
+	         if (err) {
+	             res.render('error', {
+	                 status: 500
+	             });
+	         } else {
+	             res.jsonp(productCategory);
+	         }
+	     });
+	};
+
+	exports.update = function(req, res){
+	 var id = req.body._id;
+	  
+	 ProductCategoryModel.findOne({_id: id}, function(err, productCategory){
+	         _.extend(productCategory, req.body);
+	         productCategory.save(function(err) {
+	             if (err) {
+	                 res.send(500, err);
+	             } else {
+	                 res.jsonp(productCategory);
+	             }
+	         });
+	     });
+	};

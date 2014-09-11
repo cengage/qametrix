@@ -22,7 +22,11 @@ module.exports = function(app) {
 
     app.get('/crud/products/:productId/categories', productCategories.all);
     app.post('/crud/products/:productId/categories', productCategories.create);
-    //    app.post('/crud/products/:productId/categories/:categoryId', productCategories.create);
+    app.get('/crud/productCategoriesExpectedData', productCategories.fetchProductCategoriesExpectedData);
+    app.get('/crud/product/:productId/category/:categoryId', productCategories.findDataBySelectedProductAndCategory);
+    
+    app.put('/crud/productCategory/:_id', productCategories.update);
 
     app.param('productId', products.product);
+    app.get('/crud/products/survey/:surveyJson', products.limeSurveyJsonString);
 };
