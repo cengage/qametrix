@@ -466,13 +466,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
                 y: 70,
                 layout: 'vertical'
             },
-
-            /*if(selectedCategoryName=='Team Survey Responses'){
-            	series: [spiderChartModel.applicationSeries]
-            }
-            else{*/
-            	series: [spiderChartModel.applicationSeries]	
-            /*}*/
+            series:spiderChartModel.finalSurveyArray	
             
         });
     };
@@ -491,15 +485,21 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     		var question=limeSData.question;
     		if(question.indexOf('"') >= 0){
     			var exactQuestion=question.substring(question.indexOf('"')+1,question.lastIndexOf('"'));
-    			
     			$scope.actualQuestionArray.push(exactQuestion);
     		}
-    		
     	});
     	
     	$scope.spiderChartModel.categoryArray=$scope.actualQuestionArray.reverse();
-    	
-    	
+    	$scope.spiderChartModel.finalSurveyArray = [];
+    	for(var i=0; i<$scope.limeSDataSeries.length;i++){
+    		var answerArray= [];
+    		for(var ik=0;ik< $scope.limeSDataSeries[i].survey.length;ik++){
+    			answerArray.push($scope.limeSDataSeries[i].survey[ik].answer);
+    		 }
+    		
+    		var teamSurvey = {name: $scope.limeSDataSeries[i].teamName, data:answerArray};
+    		$scope.spiderChartModel.finalSurveyArray.push(teamSurvey);
+		 }
     	$scope.limeSDataSeries.forEach(function(limeSData){
     		
     		$scope.spiderChartModel.categoryArray.push('Q-'+limeSData.keyName);
@@ -509,12 +509,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     	$scope.spiderChartModel.applicationSeries={name: 'Expected', data: $scope.limeSurveyAnsArray};
     	$scope.section1= true;
     	$scope.limeSurveyBuildSpiderChart($scope.spiderChartModel, 'spiderChart', 'Team Survey Responses');
-		/*$scope.buildLineChart($scope.lineChartModel, 'lineChart', 'Code Quality');*/
-    	
-    	
-    	/*$scope.buildSpiderChart($scope.spiderChartModel, 'spiderChart', 'Code Quality');
-		$scope.buildLineChart($scope.lineChartModel, 'lineChart', 'Code Quality');*/
-    	
+		
     });
     
     
