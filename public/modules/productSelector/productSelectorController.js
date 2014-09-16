@@ -34,9 +34,9 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     // function for showing responses
     $scope.selectSurvey = function(surveyId) {
     	$scope.selectedSurveyId= surveyId;
-    	console.log('sssurvey id'+surveyId);
+    	
     	var headers1 = {
-    			'Access-Control-Allow-Origin' : 'http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol',
+    			'Access-Control-Allow-Origin' : '*',
     			'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT',
     			'Access-Control-Allow-Headers': 'X-Requested-With',
     			'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	
     	
  	   var headers = {
-    			'Access-Control-Allow-Origin' : 'http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol',
+    			'Access-Control-Allow-Origin' : '*',
     			'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT',
     			'Access-Control-Allow-Headers': 'X-Requested-With',
     			'Content-Type': 'application/json',
@@ -90,11 +90,10 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	    	aFields: null
     	    }
     	}
+    	
     	});
     	request.success(
     	        function( data1, status, headers, config ) {
-    	        	console.log('making call'+data1.result);
-    	        	
 	        	$http.get('/crud/products/survey/'+data1.result).success(function(data1) {
     	       	$rootScope.$broadcast('limeSurveySelection', data1, $scope.limeSurveyQuestions);
     	        });
@@ -111,7 +110,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	if(practiceSelectedId== 1){
     		
     		var headers = {
-    				'Access-Control-Allow-Origin' : 'http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol',
+    				'Access-Control-Allow-Origin' : '*',
     				'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT',
     				'Access-Control-Allow-Headers': 'X-Requested-With',
     				'Content-Type': 'application/json',
@@ -137,7 +136,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
             function( initialData, status) {
             	$scope.sessionKeySurvey= initialData.result;
             	var headers1 = {
-            			'Access-Control-Allow-Origin' : 'http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol',
+            			'Access-Control-Allow-Origin' : '*',
             			'Access-Control-Allow-Methods' : 'POST, GET, OPTIONS, PUT',
             			'Access-Control-Allow-Headers': 'X-Requested-With',
             			'Content-Type': 'application/json',
