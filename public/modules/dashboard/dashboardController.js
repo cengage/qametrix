@@ -58,16 +58,20 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     		
     		
     		if(fetchFor=='forActualData'){
+    			
     			$scope.applicationList.push(application.name);
     		}else{
+    			
     			$scope.expectedDataApplicationList.push(application.name);
     		}
     	
     	}else{
     		if(fetchFor=='forActualData'){
+    			
     			$scope.applicationList.splice($scope.applicationList.indexOf(application.name), 1);
     		}
     		else{
+    			
     			$scope.expectedDataApplicationList.splice($scope.expectedDataApplicationList.indexOf(application.name), 1);
     		}
     	}
@@ -471,12 +475,58 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
         });
     };
     
+    $scope.limeSurveyBuildLineChart = function(lineChartModel, lineChartId, selectedCategoryName) {
+        new Highcharts.Chart({
+            chart: {
+                renderTo: lineChartId,
+                type: 'line',
+                height: 400
+            },
+            title: {
+                text: selectedCategoryName,
+                x: -20 //center
+            },
+            subtitle: {
+                x: -20
+            },
+            xAxis: {
+                categories: lineChartModel.categoryArray
+            },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                },
+                plotLines: [
+                    {
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }
+                ]
+            },
+            tooltip: {
+                valueSuffix: ''
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            //series: [lineChartModel.expectedSeries].concat(lineChartModel.applicationSeries)
+            series:lineChartModel.finalSurveyArray
+        });
+    };
+
+    
+    
     $rootScope.$on('limeSurveySelection', function(event, data, questionList) {
     	
     	$scope.limeSDataSeries=[];
     	$scope.limeSDataSeries=data;
     	//here category array represent question array 
     	$scope.spiderChartModel.categoryArray=[];
+    	$scope.lineChartModel.categoryArray=[];
     	$scope.limeSurveyAnsArray=[];
     	$scope.actualQuestionArray=[];
     	
@@ -490,7 +540,9 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     	});
     	
     	$scope.spiderChartModel.categoryArray=$scope.actualQuestionArray.reverse();
+    	$scope.lineChartModel.categoryArray=$scope.actualQuestionArray.reverse();
     	$scope.spiderChartModel.finalSurveyArray = [];
+    	$scope.lineChartModel.finalSurveyArray = [];
     	for(var i=0; i<$scope.limeSDataSeries.length;i++){
     		var answerArray= [];
     		for(var ik=0;ik< $scope.limeSDataSeries[i].survey.length;ik++){
@@ -499,6 +551,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     		
     		var teamSurvey = {name: $scope.limeSDataSeries[i].teamName, data:answerArray};
     		$scope.spiderChartModel.finalSurveyArray.push(teamSurvey);
+    		$scope.lineChartModel.finalSurveyArray.push(teamSurvey);
 		 }
     	$scope.limeSDataSeries.forEach(function(limeSData){
     		
@@ -507,8 +560,13 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 		});
 
     	$scope.spiderChartModel.applicationSeries={name: 'Expected', data: $scope.limeSurveyAnsArray};
+    	$scope.lineChartModel.applicationSeries={name: 'Expected', data: $scope.limeSurveyAnsArray};
     	$scope.section1= true;
-    	$scope.limeSurveyBuildSpiderChart($scope.spiderChartModel, 'spiderChart', 'Team Survey Responses');
+    	$scope.section2=false;
+        $scope.section3=false;
+        //$scope.cateogories=[];
+    	$scope.limeSurveyBuildSpiderChart($scope.spiderChartModel, 'spiderChart', 'Team Survey Responses - Spider Chart');
+    	$scope.limeSurveyBuildLineChart($scope.lineChartModel, 'lineChart', 'Team Survey Responses - Line Chart');
 		
     });
     
