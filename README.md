@@ -38,7 +38,7 @@ Now clone the App Repo
 
 	mkdir /sapience
 	cd /sapience
-	git clone https://github.com/cengage/sapience-ui.git
+	git clone https://github.com/cengage/sapience.git
 
 At the command line of the app directory
 	

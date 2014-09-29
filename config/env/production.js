@@ -4,6 +4,13 @@ module.exports = {
     app: {
         title: 'Quality Metrics Prod'
     },
+    db: {
+        host: 'localhost',
+        port: 27017,
+        database: 'sapience',
+        username: 'sapienceuser',
+        password: 's@pie$c&'
+    },
     passport: {
         facebook: {
             clientID: '699766656776373',
