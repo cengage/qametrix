@@ -8,8 +8,8 @@ module.exports = {
         host: 'localhost',
         port: 27017,
         database: 'sapience',
-        username: 'sapienceuser',
-        password: 's@pie$c&'
+        username: '',
+        password: ''
     },
     passport: {
         facebook: {

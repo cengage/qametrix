@@ -11,6 +11,7 @@ angular.module('sapience').config(['$stateProvider', '$urlRouterProvider',
         $stateProvider.state('PRODUCT-LIST', {
             url: '/products',
             templateUrl: '/modules/products/views/productList.html'
+
         }).state('DASHBOARD', {
             url: '/dashboard',
             views: {
@@ -21,11 +22,16 @@ angular.module('sapience').config(['$stateProvider', '$urlRouterProvider',
                     templateUrl: '/modules/productSelector/views/productSelector.html'
                 }
             }
+
         }).state('EXPECTED-DATA', {
             url: '/expectedData',
             templateUrl: 'modules/expectedData/views/expectedData.html'
-        })
-        .state('home', {
+
+        }).state('ADMIN', {
+            url: '/admin',
+            templateUrl: '/modules/admin/views/admin.html'
+
+        }).state('home', {
             url: '/',
             templateUrl: '/modules/home/views/home.html',
             data: {

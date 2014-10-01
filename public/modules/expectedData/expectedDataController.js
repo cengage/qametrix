@@ -28,9 +28,7 @@ angular.module('sapience.system').controller('expectedDataController', ['$scope'
     	$("#select_category").text(category.name);
     	$scope.selectedCategoryId=category.id;
     	console.log('inside save select category method : '+ category.id);
-    	
-    	$scope.expectedDataFormModel.sel
-    	
+
     	$http.get('/crud/product/'+$scope.selectedProductId+'/category/'+$scope.selectedCategoryId).success(function(productCategory) {
     		$scope.fetechedOjbect=productCategory;
     		
@@ -87,12 +85,10 @@ angular.module('sapience.system').controller('expectedDataController', ['$scope'
 
     	            console.log('data updated successfully ' + data.expectedValue);
     	           console.log('updated successfully the object is : '+ data);
-    	           
     	        })
-    	
     	})
     }
-    
+
     //
     $http.get('/crud/connectors').success(function(data) {
         $scope.connectors = [];
@@ -101,8 +97,8 @@ angular.module('sapience.system').controller('expectedDataController', ['$scope'
             $scope.connectors.push(connector);
         });
     });
+
     //
-    
     $scope.fetchCategories=function(connector){
     $("#select_connector").text(connector.name);
    	 $http.get('/crud/categories').success(function(data) {

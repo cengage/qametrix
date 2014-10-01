@@ -61,23 +61,23 @@
                         <td> <span class="text-primary"></span>
                             <a>
                                 <div class="glyphicon glyphicon-chevron-right" data-ng-click="practiceSelected(practice.id)" data-toggle="class">{{practice.name}}</div>
-                                
+
                             </a>
                         </td>
                     </tr>
                 </table>
                 <!-- checking it -->
                 <div id="isCollapsed22" data-ng-repeat="limeSurveyTitleResult in limeSurveyTitleResults | orderBy : 'name'">
-                                <ul>
-                                    <a>
-                                         <div class="glyphicon glyphicon-chevron-right" data-ng-click="selectSurvey(limeSurveyTitleResult.sid)" data-toggle="class">  {{limeSurveyTitleResult.surveyls_title}}
-                                         
-                                        </div>
-                                    </a>
-                                </ul>
-                 </div>
-                 
-                 <!-- <div id="isCollapsed22" data-ng-repeat="limeSurveyTitleResult1 in limeSurveyTitleResults1 | orderBy : 'name'">
+                    <ul>
+                        <a>
+                            <div class="glyphicon glyphicon-chevron-right" data-ng-click="selectSurvey(limeSurveyTitleResult.sid)" data-toggle="class">{{limeSurveyTitleResult.surveyls_title}}
+
+                            </div>
+                        </a>
+                    </ul>
+                </div>
+
+                <!-- <div id="isCollapsed22" data-ng-repeat="limeSurveyTitleResult1 in limeSurveyTitleResults1 | orderBy : 'name'">
                                 <ul>
                                     <a>
                                         <div class="glyphicon glyphicon-chevron-right" data-toggle="class">  {{limeSurveyTitleResult1}}
@@ -87,14 +87,14 @@
                                     </a>
                                 </ul>
                  </div> -->
-                
+
                 <!-- checking finish -->
-                
-                
+
+
                 <!-- <div>{{limeSurveyTitleResults[0].surveyls_title}}</div> -->
-                 <div ng-bind-html="cfdump">
-        <!-- To be populated with the CFDump from the server. -->
-    </div>
+                <div ng-bind-html="cfdump">
+                    <!-- To be populated with the CFDump from the server. -->
+                </div>
             </div>
         </accordion-group>
         <accordion-group>
