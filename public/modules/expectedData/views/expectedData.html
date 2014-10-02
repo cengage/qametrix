@@ -1,19 +1,5 @@
-<script type="text/javascript">
-    /* $(function(){
-	  
-	  $(".dropdown-menu li a").click(function(){
-	    alert("d");
-	    $(".btn:first-child").text($(this).text());
-	     $(".btn:first-child").val($(this).text());
-	  });
-
-	}); */
-</script>
 <div data-ng-controller="expectedDataController">
-
-
     <div class="row" style="margin:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-12 col-sm-offset-2">
-
         <form id="expectedDataFormId" name="expectedDataForm" class="form-horizontal" role="form" ng-submit="submitExpectedData(expectedDataFormModel)">
             <div class="btn-toolbar">
                 <!--Default buttons with dropdown menu-->
@@ -29,7 +15,6 @@
                         </li>
                     </ul>
                 </div>
-
 
                 <!--Primary buttons with dropdown menu-->
                 <div class="btn-group">
@@ -78,9 +63,7 @@
                 <input type="text" class="input-medium" name="text" ng-model="expectedDataFormModel.selectedExpectedValue" style="margin: 4px; margin-left: 20px;" placeholder="Expected Value">
                 <textarea rows="3" cols="35" ng-model="expectedDataFormModel.selectedExpression" placeholder="Enter Expression Here"></textarea>
                 <button type="submit" class="btn btn-success">Submit</button>
-
             </div>
         </form>
-
     </div>
 </div>

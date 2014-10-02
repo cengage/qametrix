@@ -47,7 +47,8 @@
             }));
 
             it('$scope.find() should create an array with at least one artifact object ' +
-                'fetched from XHR', function() {
+                'fetched from XHR',
+                function() {
 
                     // test expected GET request
                     $httpBackend.expectGET('artifacts').respond([{
@@ -68,7 +69,8 @@
                 });
 
             it('$scope.findOne() should create an array with one artifact object fetched ' +
-                'from XHR using a artifactId URL parameter', function() {
+                'from XHR using a artifactId URL parameter',
+                function() {
                     // fixture URL parament
                     $stateParams.artifactId = '525a8422f6d0f87f0e407a33';
 
@@ -94,7 +96,8 @@
 
             it('$scope.create() with valid form data should send a POST request ' +
                 'with the form input values and then ' +
-                'locate to new object URL', function() {
+                'locate to new object URL',
+                function() {
 
                     // fixture expected POST data
                     var postArtifactData = function() {
