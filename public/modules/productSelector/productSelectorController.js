@@ -20,7 +20,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
         });
     });
     
-    $scope.fetchProducts=function(platform){
+    $scope.fetchProducts=function(platform, isCollapsed2){
     	
     	$scope.filteredProducts=[];
     	$scope.products.forEach(function(product,index){

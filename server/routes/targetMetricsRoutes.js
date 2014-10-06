@@ -5,6 +5,6 @@ var targetMetrics = require('../controllers/targetMetrics');
 
 module.exports = function(app) {
 
-    app.get('/crud/targetMetrics', targetMetrics.all);
-    app.post('/crud/targetMetrics', targetMetrics.create);
+    /*app.get('/crud/targetMetrics', targetMetrics.all);
+    app.post('/crud/targetMetrics', targetMetrics.create);*/
 };

@@ -28,6 +28,10 @@ var ProductCategorySchema = new Schema({
     created: {
         type: Date,
         default: Date.now
+    },
+    expectedValue: {
+        type: Number,
+        required: true
     }
 });
 

@@ -1,8 +1,8 @@
 'use strict';
 
 /**
- * Module dependencies.
- */
+* Module dependencies.
+*/
 var mongoose = require('mongoose'),
     http = require('http'),
     _ = require('lodash'),
@@ -11,6 +11,7 @@ var mongoose = require('mongoose'),
     MetricModel = mongoose.model('Metric'),
     ConnectorModel = mongoose.model('Connector'),
     CategoryModel = mongoose.model('Category'),
+    dateFormat = require('dateformat'),
     ProductCategoryModel = mongoose.model('ProductCategory');
 
 function getValueFromProductCategory(productCategory) {
@@ -30,9 +31,12 @@ function getValueFromProductCategory(productCategory) {
         res.on('data', function(chunk) {
             xml += chunk;
         });
-
+        
+        console.log('outside end function');
+        
         res.on('end', function() {
 
+        	console.log('inside end function');
             var metrixData = xml.substring(170, 445);
 
             var coveredElementsPos, coveredElementsSelectedData, coveredElementsRequestedData,
@@ -103,7 +107,7 @@ function getValueFromProductCategory(productCategory) {
 
                 var cyclomaticComplexity = S(S(complexityRequestedData).toInt() / S(methodsRequestedData).toInt()).toString();
 
-                console.log('final cyclomaticComplexity is :  ' + cyclomaticComplexity);
+                console.log('final cyclomaticComplexity is : ' + cyclomaticComplexity);
 
                 deferred.resolve(cyclomaticComplexity);
             }
@@ -145,21 +149,56 @@ exports.fetch = function(req, res) {
                     _.each(productCategories, function(productCategory) {
 
                         var fetchReq = getValueFromProductCategory(productCategory);
+                        
+                        var ts_hms = new Date();
+                        var day=dateFormat(ts_hms, 'yyyy-mm-dd');
+                   //     currentDate.format('dd-mm-yyyy');
 
                         fetchReq.then(function(jenkinsData) {
                             var metric = new MetricModel({
                                 product: productCategory.product,
                                 category: productCategory.category,
-                                value: jenkinsData
+                                value: jenkinsData,
+                                created: day
                             });
-                            metric.save(function(err) {
-                                if (err) {
-                                    console.error('### Saving to db', err);
-
+                            
+                            MetricModel.find({product: productCategory.product,
+                                category: productCategory.category,
+                                created: day}, '-__v').exec(function(err, metrics) {
+                                	console.log(metrics);
+                                	var existingMetrics=metrics;
+                                if (metrics==='') {
+                                	console.log('inside if statement');
+                                	metric.save(function(err) {
+                                        if (err) {
+                                            console.error('### Error in saving clover to db', err);
+                                        } else {
+                                            console.log('### saving clover data to db');
+                                        }
+                                    });
                                 } else {
-                                    console.log('### Saved data to db');
+                                    console.log('No need to add duplicate entry:inside else statement');
+                                    var updatedMetric = {
+                                        product: existingMetrics[0].product,
+                                        category: existingMetrics[0].category,
+                                        value: jenkinsData
+                                    };
+                                    
+                                    console.log('updated metric is : '+ updatedMetric);
+                                   MetricModel.findOne({_id: metrics[0]._id}, function(err, preMetric){
+                            	        _.extend(preMetric, updatedMetric);
+                            	        preMetric.save(function(err) {
+                            	            if (err) {
+                            	                res.send(500, err);
+                            	            } else {
+                            	                res.jsonp(preMetric);
+                            	            }
+                            	        });
+                            	    });
+                                    
                                 }
                             });
+                            
                             metrics.push(metric);
                         });
                         fetchRequests.push(fetchReq);

@@ -24,9 +24,14 @@ module.exports = function(app) {
     app.post('/crud/products/:productId/categories', productCategories.create);
     app.get('/crud/productCategoriesExpectedData', productCategories.fetchProductCategoriesExpectedData);
     app.get('/crud/product/:productId/category/:categoryId', productCategories.findDataBySelectedProductAndCategory);
+    app.put('/crud/productCategory/update', productCategories.update);
+  //  app.put('/crud/productCategory/:_id', productCategories.update);
     
-    app.put('/crud/productCategory/:_id', productCategories.update);
+    
 
     app.param('productId', products.product);
     app.get('/crud/products/survey/:surveyJson', products.limeSurveyJsonString);
+    
+   /* app.get('/crud/targetMetrics', targetExpMetrics.all);
+    app.post('/crud/targetMetrics', targetExpMetrics.create);*/
 };

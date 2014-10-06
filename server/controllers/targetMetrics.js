@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
 /**
  * List of Metrics
  */
-exports.all = function(req, res) {
+/*exports.allTargetmetrics = function(req, res) {
     targetMetricModel.find({}, '-__v').populate([{
         path: 'product',
         select: 'code name'
@@ -25,9 +25,9 @@ exports.all = function(req, res) {
     });
 };
 
-/*create targetMetric*/
+create targetMetric
 
-exports.create = function(req, res) {
+exports.createTargetmetrics = function(req, res) {
     var targetMetric = new targetMetricModel(req.body);
 
     targetMetric.save(function(err) {
@@ -37,4 +37,4 @@ exports.create = function(req, res) {
             res.jsonp(targetMetric);
         }
     });
-};
+};*/
