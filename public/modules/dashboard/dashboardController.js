@@ -202,7 +202,14 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
 			 
 			var DWProductsList=$scope.dateWiseMetricData[productApplication];
 			
-			var dateWiseProductWithValues=DWProductsList.toString().split(',');
+			if(typeof DWProductsList === 'undefined'){
+				alert('No Data Found for this product, Please uncheck actual/expected check boxes for this category');
+				 };
+			
+			
+				var dateWiseProductWithValues=DWProductsList.toString().split(',');
+			
+			
 			
 			$scope.dateWisePValue={};
 			$scope.dateWisePNames=[];

@@ -3,9 +3,29 @@
 angular.module('sapience.charts').controller('ProductSelectorController', ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
     $http.get('/crud/products').success(function(data) {
     	$scope.products = [];
+    	
         data.forEach(function(product, index) {
-            var product = {'id': index, 'selected':false, 'name': product.name,'platform': product.platform};
+            var product = {'id': product._id, 'selected':false, 'name': product.name,'platform': product.platform};
             $scope.products.push(product);
+        });
+    });
+    
+    $http.get('/crud/metrics').success(function(dataMetrics) {
+    	$scope.productsWithData = [];
+    	$scope.metricsData = [];
+    	$scope.products.forEach(function(product, index) {
+    		
+    		
+    		dataMetrics.forEach(function(metric, index){
+    			//console.log('product.name'+ product.id);
+    			//console.log('metric.product.name'+ metric.product._id);
+        		if(product.id == metric.product._id){
+        			//console.log('dataMetrics'+ metric.product.name);
+        			$scope.productsWithData.push(product);
+        		}
+        	});
+    		
+    		
         });
     });
     
@@ -22,12 +42,14 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     
     $scope.fetchProducts=function(platform, isCollapsed2){
     	
-    	$scope.filteredProducts=[];
-    	$scope.products.forEach(function(product,index){
-    		if(product.platform==platform.id){
-    			$scope.filteredProducts.push(product);
+    	$scope.filteredPrroducts=[];
+    	$scope.productsWithData.forEach(function(product,index){
+    		
+    		if(product.platform==platform.id && $scope.filteredPrroducts.indexOf(product) == -1){
+    		$scope.filteredPrroducts.push(product);
     		}
     	});
+    	
     };
     
    
