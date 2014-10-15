@@ -1,7 +1,7 @@
 <section data-ng-controller="ProductSelectorController" class="nav nav-sidebar">
 
     <accordion close-others="true">
-        <accordion-group is-open="true" is-disabled="status.isFirstDisabled">
+       <accordion-group is-open="true" is-disabled="status.isFirstDisabled">
             <accordion-heading>
                 <b>Platforms / Products</b>
             </accordion-heading>
@@ -10,10 +10,10 @@
                     <tr data-ng-repeat="platform in platforms | orderBy : 'name'">
                         <td> <span class="text-primary"></span>
                             <a>
-                                <div id="head-{{$index}}" data-ng-click="fetchProducts(platform, isCollapsed2);isCollapsed2= !isCollapsed2" class="glyphicon glyphicon-chevron-right" data-toggle="class"> <b>{{platform.name}}</b>
+                                <div data-ng-click="fetchProducts(platform);isCollapsed2= !isCollapsed2" class="glyphicon glyphicon-chevron-right" data-toggle="class"> <b>{{platform.name}}</b>
                                 </div>
                             </a>
-                            <div collapse="!isCollapsed2" data-ng-repeat="product in filteredProducts | orderBy : 'name'">
+                            <div id="isCollapsed2" collapse="!isCollapsed2" data-ng-repeat="product in filteredPrroducts | orderBy : 'name'">
                                 <ul>
 
                                     <a>
@@ -23,10 +23,12 @@
                                     <div id="isCollapsed3" collapse="!isCollapsed3">
 
                                         <div class="row">
-<div class="col-lg-6">
+                                            <div class="col-lg-6">
                                                 <div class="checkbox">
                                                     <span>
+
 											        <label class="checkbox-inline"><input type="checkbox" data-ng-click="productSelected(product,actualDataModel)" ng-model="actualDataModel"> Actual</label>
+
 											      </span>
                                                 </div>
                                             </div>
