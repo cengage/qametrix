@@ -65,6 +65,10 @@ Upstart Commands:
 	/sbin/start app_name
 	/sbin/stop app_name
 
+Service Commands:
+
+	sudo service qametrix start / stop / status
+	sudo service mongod start / stop / status
  
 
 Validate Running Node Server Process:
@@ -82,15 +86,14 @@ unix 2 [ ACC ] STREAM LISTENING 35601 25112/mongod /tmp/mongodb-27017.sock
 Additional Code Notes:
 
 	init.d  command files are 755
-
 	init config files are 644
 
 run this command as root / sudo su -
 	
-	service sapience start
+	service qametrix start
 
-	strace initctl start sapience
+	strace initctl start qametrix
 
-	/sbin/start sapience
-	/sbin/status sapience
-	/sbin/status sapience
+	/sbin/start qametrix
+	/sbin/status qametrix
+	/sbin/status qametrix

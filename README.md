@@ -1,7 +1,9 @@
 ![icon](QAMetrix-Logo.png)
 
-## Sapience UI
+## QAMetrix UI
 A NodeJS User Interface for the QA Metrix project.
+
+PROD URL: <http://qametrix.cengage.info>
 
 ## Install Pre-Requisite Apps on Local
 install	brew
@@ -36,21 +38,22 @@ install grunt
 
 Now clone the App Repo
 
-	mkdir /sapience
-	cd /sapience
-	git clone https://github.com/cengage/sapience.git
+	mkdir /qametrix
+	cd /qametrix
+	git clone git@github.com:cengage/qametrix.git
 
 At the command line of the app directory
 	
-	cd {to-your-dir-here} /sapience
+	cd {to-your-dir-here} /qametrix
 	npm install
+	bower install
 	grunt server 
 
 ###  Troublshooting and Issues
 
 If you have troubles with your installation / configuration, perform the following commands:
 
-    cd {to-your-dir-here} /sapience
+    cd {to-your-dir-here} /qametrix
     sudo npm cache clean
     bower cache clean
     rm -rf .bower-cache .bower-registry .bower-tmp public/lib
