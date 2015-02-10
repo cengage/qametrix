@@ -1,12 +1,12 @@
 {
     "name": "sapience-ui",
-    "description": "Sapience User Interface",
+    "description": "QA Metrix User Interface",
     "version": "0.0.1",
     "bin": "server.js",
     "private": true,
     "repository": {
         "type": "git",
-        "url": "https://github.com/cengage/sapience-ui.git"
+        "url": "https://github.com/cengage/qametrix.git"
     },
     "engines": {
         "node": "0.10.x",

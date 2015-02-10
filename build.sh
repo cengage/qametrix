@@ -5,7 +5,7 @@
 # *           Create Date: May 2nd, 2014
 # *    Last Modified Date:  
 # *
-# * Project / Application: Master Build Script for Sapience UI
+# * Project / Application: Master Build Script for QA Metrix UI
 # *   Objective / Purpose: joint build script
 # *
 # *  Script / Action Name: Build
