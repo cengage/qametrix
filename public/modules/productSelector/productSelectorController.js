@@ -17,10 +17,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     		
     		
     		dataMetrics.forEach(function(metric, index){
-    			//console.log('product.name'+ product.id);
-    			//console.log('metric.product.name'+ metric.product._id);
         		if(product.id == metric.product._id){
-        			//console.log('dataMetrics'+ metric.product.name);
         			$scope.productsWithData.push(product);
         		}
         	});
@@ -83,6 +80,24 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	        	$scope.limeSurveyQuestions=data.result;
     	         });  
     	
+    	var groupRequest = $http({
+        	method: "post",
+        	headers: headers1,
+        	url: "http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol",
+        	data: {
+        		method: "list_groups",
+        		id: 1,
+        	    params: {
+        	    	sSessionKey: $scope.sessionKeySurvey,
+        	    	iSurveyID : surveyId
+        	    }
+        	}
+        	});
+    		groupRequest.success(
+        	        function( data, status, headers, config ) {
+        	        	$scope.limeSurveyGroups=data.result;
+        	         });  
+    	
     	
  	   var headers = {
     			'Access-Control-Allow-Origin' : '*',
@@ -117,7 +132,11 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	request.success(
     	        function( data1, status, headers, config ) {
 	        	$http.get('/crud/products/survey/'+data1.result).success(function(data1) {
-    	       	$rootScope.$broadcast('limeSurveySelection', data1, $scope.limeSurveyQuestions);
+	        	if($scope.limeSurveyGroups.length>2){
+	        		$rootScope.$broadcast('limeSurveySelection', data1, $scope.limeSurveyGroups);
+	        	}else{
+	        		$rootScope.$broadcast('limeSurveySelection', data1, $scope.limeSurveyQuestions);	
+	        	}
     	        });
 	        	
     	       }

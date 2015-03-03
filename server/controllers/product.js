@@ -89,17 +89,27 @@ exports.all = function(req, res) {
 	   
 	   var answers = [];
 	   var finalSurveyAnswers= [];
+	   var teamName;
 			   for ( var key in jsonArray) {
 				var value = jsonArray[key];
 				if (key.substring(0, 1) == 'Q') {
-					key = key.substring(1, (key.length - 7))
+					if(key.length>5)
+					key = key.substring(1, (key.length - 7));
+					if(key.length<5){
+						if(key == "Q38"){
+						teamName=value;	
+						key = key.substring(1, (key.length - 1));
+					};
 					value = value.substring(value.length - 1, value.length);
 					answers.push({
 						keyName : key,
 						answer : value
 					});
-				}
-			}
+				};
+			   }
+				
+			   }			
+	
 	   
 	   var count=0; var previousKey= 0; var totalSum=0; var avg=0;
 	   for(var i=0;i<answers.length;i++){
@@ -123,7 +133,12 @@ exports.all = function(req, res) {
 	 }
 	   
 	//   
+	   if(jsonArray.TN1==undefined)
+		   teamsWithSurveys.push({teamName:jsonArray.Q38, survey:finalSurveyAnswers});   
+	   else
 	   teamsWithSurveys.push({teamName:jsonArray.TN1, survey:finalSurveyAnswers});
+	   
 	}}
 	   res.jsonp(teamsWithSurveys);
 	};
+	

@@ -538,12 +538,19 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     	$scope.actualQuestionArray=[];
     	
     	questionList.forEach(function(limeSData){
-    		
-    		var question=limeSData.question;
-    		if(question.indexOf('"') >= 0){
-    			var exactQuestion=question.substring(question.indexOf('"')+1,question.lastIndexOf('"'));
-    			$scope.actualQuestionArray.push(exactQuestion);
+    		var question='';
+    		if(limeSData.question==undefined){
+    			data
+    			question=limeSData.group_name;
+    			$scope.actualQuestionArray.push(question);
+    		}else{
+    			question=limeSData.question;
+    			if(question.indexOf('"') >= 0){
+        			var exactQuestion=question.substring(question.indexOf('"')+1,question.lastIndexOf('"'));
+        			$scope.actualQuestionArray.push(exactQuestion);
+        		}
     		}
+    		
     	});
     	
     	$scope.spiderChartModel.categoryArray=$scope.actualQuestionArray.reverse();
@@ -553,6 +560,7 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     	for(var i=0; i<$scope.limeSDataSeries.length;i++){
     		var answerArray= [];
     		for(var ik=0;ik< $scope.limeSDataSeries[i].survey.length;ik++){
+    			if($scope.limeSDataSeries[i].survey[ik].answer != undefined)
     			answerArray.push($scope.limeSDataSeries[i].survey[ik].answer);
     		 }
     		
@@ -561,7 +569,6 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     		$scope.lineChartModel.finalSurveyArray.push(teamSurvey);
 		 }
     	$scope.limeSDataSeries.forEach(function(limeSData){
-    		
     		$scope.spiderChartModel.categoryArray.push('Q-'+limeSData.keyName);
     		$scope.limeSurveyAnsArray.push(limeSData.answer);
 		});
