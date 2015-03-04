@@ -90,14 +90,13 @@ exports.all = function(req, res) {
 	   var answers = [];
 	   var finalSurveyAnswers= [];
 	   var teamName;
-			   for ( var key in jsonArray) {
+			   for (var key in jsonArray) {
 				var value = jsonArray[key];
 				if (key.substring(0, 1) == 'Q') {
-					if(key.length>5)
+					if(key.length>5){
 					key = key.substring(1, (key.length - 7));
-					if(key.length<5){
-						if(key == "Q38"){
-						teamName=value;	
+					}
+					else{
 						key = key.substring(1, (key.length - 1));
 					};
 					value = value.substring(value.length - 1, value.length);
@@ -139,6 +138,7 @@ exports.all = function(req, res) {
 	   teamsWithSurveys.push({teamName:jsonArray.TN1, survey:finalSurveyAnswers});
 	   
 	}}
+	    console.log(teamsWithSurveys);
 	   res.jsonp(teamsWithSurveys);
 	};
 	

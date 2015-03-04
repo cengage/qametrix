@@ -540,7 +540,6 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     	questionList.forEach(function(limeSData){
     		var question='';
     		if(limeSData.question==undefined){
-    			data
     			question=limeSData.group_name;
     			$scope.actualQuestionArray.push(question);
     		}else{
