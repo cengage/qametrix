@@ -94,9 +94,11 @@ exports.all = function(req, res) {
 				var value = jsonArray[key];
 				if (key.substring(0, 1) == 'Q') {
 					if(key.length>5){
+						console.log('inside first survey case');
 					key = key.substring(1, (key.length - 7));
 					}
 					else{
+						console.log('inside second survey case');
 						key = key.substring(1, (key.length - 1));
 					};
 					value = value.substring(value.length - 1, value.length);
@@ -114,7 +116,7 @@ exports.all = function(req, res) {
 	   for(var i=0;i<answers.length;i++){
 	  if(answers[i].keyName!= previousKey && previousKey!=0){
 	   avg= totalSum/count;
-	   //Save in other array
+	   // Save in other array
 	   finalSurveyAnswers.push({keyName:previousKey, answer:avg});
 	   count=0;
 	   totalSum=0;
@@ -126,7 +128,7 @@ exports.all = function(req, res) {
 	   previousKey= answers[i].keyName;
 	  if(i== answers.length-1){
 	   avg= totalSum/count;
-	   //Save in other array
+	   // Save in other array
 	   finalSurveyAnswers.push({keyName:previousKey, answer:avg});
 	  }
 	 }
@@ -137,8 +139,7 @@ exports.all = function(req, res) {
 	   else
 	   teamsWithSurveys.push({teamName:jsonArray.TN1, survey:finalSurveyAnswers});
 	   
-	}}
-	    console.log(teamsWithSurveys);
+	   console.log(teamsWithSurveys);
 	   res.jsonp(teamsWithSurveys);
-	};
+	}};
 	
