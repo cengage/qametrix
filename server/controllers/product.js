@@ -77,6 +77,7 @@ exports.all = function(req, res) {
 };
 
 	exports.limeSurveyJsonString = function(req, res) {
+		console.log('inside product.js lime Survey');
 		var teamsWithSurveys = [];
 	    var jsonString= req.params.surveyJson;
 	    var b = new Buffer(jsonString, 'base64')
@@ -140,6 +141,7 @@ exports.all = function(req, res) {
 	   teamsWithSurveys.push({teamName:jsonArray.TN1, survey:finalSurveyAnswers});
 	   
 	   console.log(teamsWithSurveys);
-	   res.jsonp(teamsWithSurveys);
-	}};
+	   
+	}
+	    res.jsonp(teamsWithSurveys); };
 	
