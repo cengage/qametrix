@@ -132,11 +132,9 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	request.success(
     	        function( data1, status, headers, config ) {
 	        	$http.get('/crud/products/survey/'+data1.result).success(function(data1) {
-	        	if($scope.limeSurveyGroups.length>2){
-	        		$rootScope.$broadcast('limeSurveySelection', data1, $scope.limeSurveyGroups);
-	        	}else{
+	        	
 	        		$rootScope.$broadcast('limeSurveySelection', data1, $scope.limeSurveyQuestions);	
-	        	}
+	        	
     	        });
 	        	
     	       }

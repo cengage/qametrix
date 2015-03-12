@@ -96,7 +96,7 @@ exports.all = function(req, res) {
 				if (key.substring(0, 1) == 'Q') {
 					if(key.length>5){
 						console.log('inside first survey case');
-					key = key.substring(1, (key.length - 7));
+					key = key.substring(1, 3);
 					}
 					else{
 						console.log('inside second survey case');
