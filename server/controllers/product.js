@@ -80,58 +80,57 @@ exports.all = function(req, res) {
 		console.log('inside product.js lime Survey');
 		var teamsWithSurveys = [];
 	    var jsonString= req.params.surveyJson;
-	    var b = new Buffer(jsonString, 'base64')
+	    var b = new Buffer(jsonString, 'base64');
 	    jsonString = b.toString();
 	    var jsonObj=  JSON.parse(jsonString);
 	    for(var keyh in jsonObj.responses) {
-	    var jsonArrayMain = jsonObj.responses[keyh];
-	    for(var key1 in jsonArrayMain) {
-	    var jsonArray = jsonArrayMain[key1];
-	   
-	   var answers = [];
-	   var finalSurveyAnswers= [];
-	   var teamName;
-			   for (var key in jsonArray) {
-				var value = jsonArray[key];
-				if (key.substring(0, 1) == 'Q') {
-					if(key.length>5){
-						console.log('inside first survey case');
-					key = key.substring(1, 3);
-					}
-					else{
-						console.log('inside second survey case');
-						key = key.substring(1, (key.length - 1));
-					};
-					value = value.substring(value.length - 1, value.length);
-					answers.push({
-						keyName : key,
-						answer : value
-					});
-				};
-			   }
+	    	
+	    	var jsonArrayMain = jsonObj.responses[keyh];
+	    	for(var key1 in jsonArrayMain) {
+	    		
+	    		var jsonArray = jsonArrayMain[key1];
+	    		var answers = [];
+	    		var finalSurveyAnswers= [];
+	    		var teamName;
+	    		
+	    		for (var key in jsonArray) {
+	    		
+	    			var value = jsonArray[key];
+	    			if (key.substring(0, 1) == 'Q') {
+	    				key = key.match(/\d+/g).map(Number)[0];
+						value = value.substring(value.length - 1, value.length);
+						answers.push({
+							keyName : key,
+							answer : value
+						});
+	    			};
+	    		}
+	    		console.log('checking answers list ');
+	    		console.log(answers);
 				
 			   }			
 	
 	   
-	   var count=0; var previousKey= 0; var totalSum=0; var avg=0;
-	   for(var i=0;i<answers.length;i++){
-	  if(answers[i].keyName!= previousKey && previousKey!=0){
-	   avg= totalSum/count;
-	   // Save in other array
-	   finalSurveyAnswers.push({keyName:previousKey, answer:avg});
-	   count=0;
-	   totalSum=0;
-	   avg= 0;
+	    	var count=0; var previousKey= 0; var totalSum=0; var avg=0;
+	    	
+	    	for(var i=0;i<answers.length;i++){
+	    		if(answers[i].keyName!= previousKey && previousKey!=0){
+	    			avg= totalSum/count;
+	   // 	Save in other array
+	    			finalSurveyAnswers.push({keyName:previousKey, answer:avg});
+				   count=0;
+				   totalSum=0;
+				   avg= 0;
 	   
-	  }
-	   count= count+1;
-	   totalSum= totalSum + parseInt(answers[i].answer);
-	   previousKey= answers[i].keyName;
-	  if(i== answers.length-1){
-	   avg= totalSum/count;
-	   // Save in other array
-	   finalSurveyAnswers.push({keyName:previousKey, answer:avg});
-	  }
+	    		}
+			   count= count+1;
+			   totalSum= totalSum + parseInt(answers[i].answer);
+			   previousKey= answers[i].keyName;
+			  if(i== answers.length-1){
+				  avg= totalSum/count;
+			   	// Save in other array
+			   	finalSurveyAnswers.push({keyName:previousKey, answer:avg});
+			  }
 	 }
 	   
 	//   
