@@ -65,7 +65,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	var request1 = $http({
     	method: "post",
     	headers: headers1,
-    	url: "http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol",
+    	url: "http://10.172.254.209/index.php/admin/remotecontrol",
     	data: {
     		method: "list_questions",
     		id: 1,
@@ -83,7 +83,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	var groupRequest = $http({
         	method: "post",
         	headers: headers1,
-        	url: "http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol",
+        	url: "http://10.172.254.209/index.php/admin/remotecontrol",
         	data: {
         		method: "list_groups",
         		id: 1,
@@ -110,7 +110,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	var request = $http({
     	method: "post",
     	headers: headers,
-    	url: "http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol",
+    	url: "http://10.172.254.209/index.php/admin/remotecontrol",
     	data: {
     		method: "export_responses",
     		id: 1,
@@ -132,9 +132,11 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	request.success(
     	        function( data1, status, headers, config ) {
 	        	$http.get('/crud/products/survey/'+data1.result).success(function(data1) {
-	        	
+	        	if($scope.limeSurveyGroups.length>2){
+	        		$rootScope.$broadcast('limeSurveySelection', data1, $scope.limeSurveyGroups);
+	        	}else{
 	        		$rootScope.$broadcast('limeSurveySelection', data1, $scope.limeSurveyQuestions);	
-	        	
+	        	}
     	        });
 	        	
     	       }
@@ -159,7 +161,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
     	var request = $http({
             method: "post",
             headers: headers,
-            url: "http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol",
+            url: "http://10.172.254.209/index.php/admin/remotecontrol",
             data: {
             	method: "get_session_key",
             	id: 1,
@@ -185,7 +187,7 @@ angular.module('sapience.charts').controller('ProductSelectorController', ['$roo
             	var request1 = $http({
             	method: "post",
             	headers: headers1,
-            	url: "http://ec2-54-210-110-49.compute-1.amazonaws.com:8888/index.php/admin/remotecontrol",
+            	url: "http://10.172.254.209/index.php/admin/remotecontrol",
             	data: {
             		method: "list_surveys",
             		id: 1,
