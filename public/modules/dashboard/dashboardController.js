@@ -562,9 +562,22 @@ angular.module('sapience.charts').controller('dashboardController', ['$rootScope
     			if($scope.limeSDataSeries[i].survey[ik].answer != undefined)
     			answerArray.push($scope.limeSDataSeries[i].survey[ik].answer);
     		 }
+    		var isTeamExist=false;
+    		$scope.spiderChartModel.finalSurveyArray.forEach(function(finalSurvey){
+    			if(finalSurvey.name == $scope.limeSDataSeries[i].teamName){
+    				isTeamExist=true;
+    				for(var j=0; j<finalSurvey.data.length; j++){
+    					finalSurvey.data[j] = (finalSurvey.data[j]+answerArray[j])/2; 
+    				}
+    			}
+    		});
+    		console.log($scope.limeSDataSeries[i].teamName);
+    		console.log(answerArray);
+    		if(!isTeamExist){
+    			var teamSurvey = {name: $scope.limeSDataSeries[i].teamName, data:answerArray};
+        		$scope.spiderChartModel.finalSurveyArray.push(teamSurvey);	
+    		}
     		
-    		var teamSurvey = {name: $scope.limeSDataSeries[i].teamName, data:answerArray};
-    		$scope.spiderChartModel.finalSurveyArray.push(teamSurvey);
     		$scope.lineChartModel.finalSurveyArray.push(teamSurvey);
 		 }
     	$scope.limeSDataSeries.forEach(function(limeSData){
